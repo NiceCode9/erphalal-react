@@ -142,18 +142,8 @@ export default function Home() {
         .limit(5);
 
       const monthNames = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
+        "Jan", "Feb", "Mar", "Apr", "Mei", "Jun", 
+        "Jul", "Agt", "Sep", "Okt", "Nov", "Des"
       ];
 
       setData({

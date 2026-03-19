@@ -89,7 +89,7 @@ export default function PurchaseForm() {
         setItems(mappedItems.length > 0 ? mappedItems : [{ product_id: "", quantity: "1", price: "0", expired_at: "" }]);
       }
     } catch (error: any) {
-      toast.error("Failed to fetch purchase details");
+      toast.error("Gagal mengambil detail pembelian");
       navigate("/purchases");
     } finally {
       setFetching(false);
@@ -130,8 +130,8 @@ export default function PurchaseForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!supplierId) return toast.error("Please select a supplier");
-    if (items.some(item => !item.product_id)) return toast.error("Please select a product for all items");
+    if (!supplierId) return toast.error("Silakan pilih supplier");
+    if (items.some(item => !item.product_id)) return toast.error("Silakan pilih produk untuk semua item");
 
     setLoading(true);
     try {
@@ -193,10 +193,10 @@ export default function PurchaseForm() {
       const { error: batchesError } = await supabase.from("stock_batches").insert(stockBatchesData);
       if (batchesError) throw batchesError;
 
-      toast.success(`Purchase ${isEdit ? "updated" : "created"} successfully`);
+      toast.success(`Pembelian berhasil ${isEdit ? "diperbarui" : "dibuat"}`);
       navigate("/purchases");
     } catch (error: any) {
-      toast.error(error.message || "An error occurred");
+      toast.error(error.message || "Terjadi kesalahan");
     } finally {
       setLoading(false);
     }
@@ -213,10 +213,10 @@ export default function PurchaseForm() {
   return (
     <>
       <PageMeta
-        title={`${isEdit ? "Edit" : "New"} Purchase | Halal ERP`}
-        description="Create or edit a purchase transaction"
+        title={`${isEdit ? "Edit" : "Pembelian"} Baru | Halal ERP`}
+        description="Buat atau edit transaksi pembelian"
       />
-      <PageBreadcrumb pageTitle={isEdit ? "Edit Purchase" : "New Purchase"} />
+      <PageBreadcrumb pageTitle={isEdit ? "Edit Pembelian" : "Pembelian Baru"} />
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Header Information */}
@@ -231,7 +231,7 @@ export default function PurchaseForm() {
                 required
                 className="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2 text-sm dark:border-gray-700 dark:text-white/90 focus:border-brand-300 focus:ring-brand-500/10"
               >
-                <option value="">Select Supplier</option>
+                <option value="">Pilih Supplier</option>
                 {suppliers.map((s) => (
                   <option key={s.id} value={s.id}>{s.name}</option>
                 ))}
@@ -241,17 +241,17 @@ export default function PurchaseForm() {
             <div className="space-y-2">
               <DatePicker
                 id="purchaseDate"
-                label="Purchase Date"
+                label="Tanggal Pembelian"
                 defaultDate={purchaseDate}
                 onChange={(_dates, dateStr) => setPurchaseDate(dateStr)}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="notes">Notes</Label>
+              <Label htmlFor="notes">Catatan</Label>
               <Input
                 id="notes"
-                placeholder="Optional notes..."
+                placeholder="Catatan opsional..."
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
               />
@@ -262,7 +262,7 @@ export default function PurchaseForm() {
         {/* Items Section */}
         <div className="rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
           <div className="border-b border-gray-100 p-5 dark:border-white/[0.05] flex items-center justify-between">
-            <h3 className="font-medium text-gray-800 dark:text-white/90">Purchase Items</h3>
+            <h3 className="font-medium text-gray-800 dark:text-white/90">Item Pembelian</h3>
             <Button 
               type="button" 
               variant="outline" 
@@ -271,7 +271,7 @@ export default function PurchaseForm() {
               className="flex items-center gap-2"
             >
               <PlusIcon />
-              Add Item
+              Tambah Item
             </Button>
           </div>
 
@@ -279,10 +279,10 @@ export default function PurchaseForm() {
             <table className="w-full text-left">
               <thead>
                 <tr className="text-sm font-medium text-gray-400">
-                  <th className="pb-4 pr-4 min-w-[250px]">Product</th>
-                  <th className="pb-4 px-4 w-32">Qty</th>
-                  <th className="pb-4 px-4 w-40">Price (IDR)</th>
-                  <th className="pb-4 px-4 w-48">Expired At</th>
+                  <th className="pb-4 pr-4 min-w-[250px]">Produk</th>
+                  <th className="pb-4 px-4 w-32">Jumlah</th>
+                  <th className="pb-4 px-4 w-40">Harga (Rp)</th>
+                  <th className="pb-4 px-4 w-48">Kedaluwarsa Pada</th>
                   <th className="pb-4 px-4 text-right">Subtotal</th>
                   <th className="pb-4 pl-4 w-10"></th>
                 </tr>
@@ -296,7 +296,7 @@ export default function PurchaseForm() {
                         onChange={(e) => handleItemChange(index, "product_id", e.target.value)}
                         className="h-10 w-full rounded-lg border border-gray-300 bg-transparent px-3 text-sm dark:border-gray-700 dark:text-white/90"
                       >
-                        <option value="">Select Product</option>
+                        <option value="">Pilih Produk</option>
                         {products.map((p) => (
                           <option key={p.id} value={p.id}>
                             [{p.code}] {p.name}
@@ -349,7 +349,7 @@ export default function PurchaseForm() {
               </tbody>
               <tfoot>
                 <tr>
-                  <td colSpan={4} className="pt-6 text-right font-semibold text-gray-800 dark:text-white">Total Amount:</td>
+                  <td colSpan={4} className="pt-6 text-right font-semibold text-gray-800 dark:text-white">Total Akhir:</td>
                   <td className="pt-6 text-right text-lg font-bold text-brand-500">
                     Rp {calculateTotal().toLocaleString()}
                   </td>
@@ -366,10 +366,10 @@ export default function PurchaseForm() {
             type="button"
             onClick={() => navigate("/purchases")}
           >
-            Cancel
+            Batal
           </Button>
           <Button type="submit" disabled={loading}>
-            {loading ? "Processing..." : isEdit ? "Update Purchase" : "Save Transaction"}
+            {loading ? "Memproses..." : isEdit ? "Perbarui Pembelian" : "Simpan Transaksi"}
           </Button>
         </div>
       </form>

@@ -76,11 +76,11 @@ export default function UserModal({
           .eq("id", profile.id);
 
         if (error) throw error;
-        toast.success("User updated successfully");
+        toast.success("Pengguna berhasil diperbarui");
       
       onSuccess();
     } catch (error: any) {
-      toast.error(error.message || "An error occurred");
+      toast.error(error.message || "Terjadi kesalahan");
     } finally {
       setLoading(false);
     }
@@ -90,18 +90,18 @@ export default function UserModal({
     <Modal isOpen={isOpen} onClose={onClose} className="max-w-[500px]">
       <div className="px-6 py-8">
         <h2 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-          Edit User Profile
+          Edit Profil Pengguna
         </h2>
         <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
-          Update the profile metadata and role for this user.
+          Perbarui metadata profil dan peran untuk pengguna ini.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="full_name">Full Name</Label>
+            <Label htmlFor="full_name">Nama Lengkap</Label>
             <Input
               id="full_name"
-              placeholder="e.g. John Doe"
+              placeholder="Misal: John Doe"
               value={formData.full_name}
               onChange={(e) =>
                 setFormData({ ...formData, full_name: e.target.value })
@@ -112,7 +112,7 @@ export default function UserModal({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="first_name">First Name</Label>
+              <Label htmlFor="first_name">Nama Depan</Label>
               <Input
                 id="first_name"
                 value={formData.first_name}
@@ -122,7 +122,7 @@ export default function UserModal({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="last_name">Last Name</Label>
+              <Label htmlFor="last_name">Nama Belakang</Label>
               <Input
                 id="last_name"
                 value={formData.last_name}
@@ -134,7 +134,7 @@ export default function UserModal({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="phone">Phone Number</Label>
+            <Label htmlFor="phone">Nomor Telepon</Label>
             <Input
               id="phone"
               type="tel"
@@ -146,7 +146,7 @@ export default function UserModal({
           </div>
 
           <div className="space-y-2">
-            <Label>Role</Label>
+            <Label>Peran</Label>
             <div className="flex gap-4">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -175,10 +175,10 @@ export default function UserModal({
 
           <div className="flex items-center justify-end gap-3 pt-4">
             <Button variant="outline" type="button" onClick={onClose}>
-              Cancel
+              Batal
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Saving..." : "Save Changes"}
+              {loading ? "Menyimpan..." : "Simpan Perubahan"}
             </Button>
           </div>
         </form>

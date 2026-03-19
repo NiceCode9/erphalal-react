@@ -66,7 +66,7 @@ export default function ProductTable({ refreshTrigger }: ProductTableProps) {
       setTotalCount(count || 0);
     } catch (error) {
       console.error("Error fetching products:", error);
-      toast.error("Failed to load products");
+      toast.error("Gagal memuat daftar produk");
     } finally {
       setLoading(false);
     }
@@ -94,11 +94,11 @@ export default function ProductTable({ refreshTrigger }: ProductTableProps) {
         .delete()
         .eq("id", productToDelete);
       if (error) throw error;
-      toast.success("Product deleted successfully");
+      toast.success("Produk berhasil dihapus");
       fetchProducts();
       setIsDeleteModalOpen(false);
     } catch (error: any) {
-      toast.error(error.message || "Failed to delete product");
+      toast.error(error.message || "Gagal menghapus produk");
     } finally {
       setIsDeleting(false);
       setProductToDelete(null);
@@ -111,7 +111,7 @@ export default function ProductTable({ refreshTrigger }: ProductTableProps) {
         <div className="relative w-full max-w-sm">
           <input
             type="text"
-            placeholder="Search products..."
+            placeholder="Cari produk..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm placeholder:text-gray-400 focus:border-brand-300 dark:border-gray-700 dark:text-white/90"
@@ -124,28 +124,28 @@ export default function ProductTable({ refreshTrigger }: ProductTableProps) {
           <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
             <TableRow>
               <TableCell isHeader className="px-5 py-3 text-start">
-                Product
+                Produk
               </TableCell>
               <TableCell isHeader className="px-5 py-3 text-start">
-                Category
+                Kategori
               </TableCell>
               <TableCell isHeader className="px-5 py-3 text-start">
-                Price
+                Harga
               </TableCell>
               <TableCell isHeader className="px-5 py-3 text-start">
-                Unit
+                Satuan
               </TableCell>
               <TableCell isHeader className="px-5 py-3 text-start">
-                Total Stock
+                Total Stok
               </TableCell>
               <TableCell isHeader className="px-5 py-3 text-start">
-                Stock Info
+                Info Stok
               </TableCell>
               <TableCell isHeader className="px-5 py-3 text-start">
                 Status
               </TableCell>
               <TableCell isHeader className="px-5 py-3 text-right">
-                Actions
+                Aksi
               </TableCell>
             </TableRow>
           </TableHeader>
@@ -153,13 +153,13 @@ export default function ProductTable({ refreshTrigger }: ProductTableProps) {
             {loading ? (
               <TableRow>
                 <TableCell colSpan={8} className="py-10 text-center">
-                  Loading...
+                  Memuat...
                 </TableCell>
               </TableRow>
             ) : products.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={8} className="py-10 text-center">
-                  No products found.
+                  Produk tidak ditemukan.
                 </TableCell>
               </TableRow>
             ) : (
@@ -171,13 +171,13 @@ export default function ProductTable({ refreshTrigger }: ProductTableProps) {
                         {product.name}
                       </span>
                       <span className="text-xs text-gray-400">
-                        Code: {product.code}{" "}
+                        Kode: {product.code}{" "}
                         {product.barcode ? `| Barcode: ${product.barcode}` : ""}
                       </span>
                     </div>
                   </TableCell>
                   <TableCell className="px-5 py-4 text-gray-500 dark:text-gray-400">
-                    {product.categories?.name || "Uncategorized"}
+                    {product.categories?.name || "Tanpa Kategori"}
                   </TableCell>
                   <TableCell className="px-5 py-4 font-medium text-gray-800 dark:text-white">
                     Rp {product.selling_price.toLocaleString()}
@@ -201,7 +201,7 @@ export default function ProductTable({ refreshTrigger }: ProductTableProps) {
                           : "bg-error-50 text-error-600"
                       }`}
                     >
-                      {product.status ? "Active" : "Inactive"}
+                      {product.status ? "Aktif" : "Tidak Aktif"}
                     </span>
                   </TableCell>
                   <TableCell className="px-5 py-4 text-right">
@@ -238,16 +238,16 @@ export default function ProductTable({ refreshTrigger }: ProductTableProps) {
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={confirmDelete}
-        title="Delete Product"
-        message="Are you sure you want to delete this product?"
-        confirmLabel="Delete"
+        title="Hapus Produk"
+        message="Apakah Anda yakin ingin menghapus produk ini?"
+        confirmLabel="Hapus"
         isLoading={isDeleting}
       />
 
       {/* Basic Pagination */}
       {!loading && totalCount > 10 && (
         <div className="flex items-center justify-between border-t border-gray-100 p-5 dark:border-white/[0.05]">
-          <p className="text-sm text-gray-500">Total: {totalCount} items</p>
+          <p className="text-sm text-gray-500">Total: {totalCount} produk</p>
           <div className="flex gap-2">
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}

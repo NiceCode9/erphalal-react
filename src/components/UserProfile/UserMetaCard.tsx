@@ -43,7 +43,7 @@ export default function UserMetaCard() {
       closeModal();
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Failed to update profile: " + (error as any).message);
+      alert("Gagal memperbarui profil: " + (error as any).message);
     }
   };
 
@@ -62,7 +62,7 @@ export default function UserMetaCard() {
               </h4>
               <div className="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Terminal User ({user?.user_metadata?.role || "Admin"})
+                  Pengguna Terminal ({user?.user_metadata?.role || "Admin"})
                 </p>
                 <div className="hidden h-3.5 w-px bg-gray-300 dark:bg-gray-700 xl:block"></div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -101,10 +101,10 @@ export default function UserMetaCard() {
         <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
           <div className="px-2 pr-14">
             <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-              Edit Personal Information
+              Edit Informasi Pribadi
             </h4>
             <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
-              Update your details to keep your profile up-to-date.
+              Perbarui detail Anda untuk menjaga profil tetap mutakhir.
             </p>
           </div>
           <form onSubmit={handleSave} className="flex flex-col">
@@ -112,10 +112,10 @@ export default function UserMetaCard() {
               <div className="mt-2">
                 <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>First Name</Label>
+                    <Label>Nama Depan</Label>
                     <Input
                       type="text"
-                      placeholder="First Name"
+                      placeholder="Nama Depan"
                       value={formData.first_name}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setFormData({ ...formData, first_name: e.target.value })
@@ -124,10 +124,10 @@ export default function UserMetaCard() {
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>Last Name</Label>
+                    <Label>Nama Belakang</Label>
                     <Input
                       type="text"
-                      placeholder="Last Name"
+                      placeholder="Nama Belakang"
                       value={formData.last_name}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setFormData({ ...formData, last_name: e.target.value })
@@ -136,12 +136,12 @@ export default function UserMetaCard() {
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>Email Address</Label>
+                    <Label>Alamat Email</Label>
                     <Input type="text" value={user?.email || ""} disabled />
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>Phone Number</Label>
+                    <Label>Nomor Telepon</Label>
                     <Input
                       type="text"
                       placeholder="+00 000 000 00"
@@ -153,15 +153,15 @@ export default function UserMetaCard() {
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>Location</Label>
-                    <Input type="text" placeholder="City, Country" />
+                    <Label>Lokasi</Label>
+                    <Input type="text" placeholder="Kota, Negara" />
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>Bio / Role Description</Label>
+                    <Label>Bio / Deskripsi Peran</Label>
                     <Input
                       type="text"
-                      placeholder="Terminal Manager"
+                      placeholder="Manajer Terminal"
                       value={user?.user_metadata?.role || "Admin"}
                       disabled
                     />
@@ -171,10 +171,10 @@ export default function UserMetaCard() {
             </div>
             <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
               <Button size="sm" variant="outline" type="button" onClick={closeModal}>
-                Close
+                Tutup
               </Button>
               <Button size="sm" type="submit">
-                Save Changes
+                Simpan Perubahan
               </Button>
             </div>
           </form>

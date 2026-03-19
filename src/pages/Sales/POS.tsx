@@ -77,7 +77,7 @@ export default function POS() {
       setProducts(productsWithStock);
     } catch (err: any) {
       console.error(err);
-      toast.error("Failed to load POS data");
+      toast.error("Gagal memuat data POS");
     } finally {
       setLoading(false);
     }
@@ -99,7 +99,7 @@ export default function POS() {
   const addToCart = (product: Product) => {
     // Check if halal certificate is expired
     if (product.halal_expired && new Date(product.halal_expired) < new Date()) {
-      toast.error(`Cannot add ${product.name}: Halal Certificate has expired (${new Date(product.halal_expired).toLocaleDateString()})`);
+      toast.error(`Tidak dapat menambahkan ${product.name}: Sertifikat Halal sudah kedaluwarsa (${new Date(product.halal_expired).toLocaleDateString()})`);
       return;
     }
 
@@ -108,7 +108,7 @@ export default function POS() {
       
       if (existing) {
         if (existing.cartQuantity + 1 > (product.totalStock || 0)) {
-          toast.error(`Not enough stock for ${product.name}`);
+          toast.error(`Stok tidak mencukupi untuk ${product.name}`);
           return prevCart;
         }
         return prevCart.map((item) =>
@@ -123,7 +123,7 @@ export default function POS() {
       }
 
       if ((product.totalStock || 0) < 1) {
-        toast.error(`Out of stock: ${product.name}`);
+        toast.error(`Stok habis: ${product.name}`);
         return prevCart;
       }
 
@@ -175,11 +175,11 @@ export default function POS() {
 
   const handleCheckout = async () => {
     if (cart.length === 0) {
-      toast.error("Cart is empty!");
+      toast.error("Keranjang belanja kosong!");
       return;
     }
     if (cashReceived < grandTotal) {
-      toast.error("Cash received is less than grand total!");
+      toast.error("Tunai diterima kurang dari total akhir!");
       return;
     }
 
@@ -264,7 +264,7 @@ export default function POS() {
         subtotal: i.subtotal
       })));
 
-      toast.success(`Transaction successful! Printing receipt...`);
+      toast.success(`Transaksi berhasil! Mencetak nota...`);
       
       handlePrint();
 
@@ -277,7 +277,7 @@ export default function POS() {
 
     } catch (error: any) {
       console.error(error);
-      toast.error(error.message || "Checkout failed");
+      toast.error(error.message || "Gagal memproses pembayaran");
     } finally {
       setIsProcessing(false);
     }
@@ -286,8 +286,8 @@ export default function POS() {
   return (
     <>
       <PageMeta
-        title="POS Cashier | Halal ERP"
-        description="Point of Sale system"
+        title="POS Kasir | Halal ERP"
+        description="Sistem Kasir Penjualan"
       />
 
       {/* Modern Print Styles to hide everything EXCEPT the receipt during print */}
@@ -336,7 +336,7 @@ export default function POS() {
             <div className="relative flex-grow">
               <Input
                 type="text"
-                placeholder="Search products by code, name, barcode..."
+                placeholder="Cari produk berdasarkan kode, nama, barcode..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -357,9 +357,9 @@ export default function POS() {
 
           <div className="flex-grow overflow-y-auto min-h-[500px] border border-gray-200 dark:border-white/[0.05] rounded-xl p-4 bg-white dark:bg-white/[0.03]">
             {loading ? (
-              <div className="flex justify-center items-center h-full">Loading products...</div>
+              <div className="flex justify-center items-center h-full text-sm font-medium">Memuat produk...</div>
             ) : filteredProducts.length === 0 ? (
-              <div className="flex justify-center items-center h-full text-gray-500">No products found</div>
+              <div className="flex justify-center items-center h-full text-gray-500 text-sm">Produk tidak ditemukan</div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {filteredProducts.map((product) => {
@@ -378,7 +378,7 @@ export default function POS() {
                       {isHalalExpired && (
                         <div className="absolute top-2 right-2 z-10">
                           <span className="bg-error-500 text-white text-[10px] px-1.5 py-0.5 rounded-md font-bold uppercase shadow-sm">
-                            Expired
+                            Kedaluwarsa
                           </span>
                         </div>
                       )}
@@ -400,7 +400,7 @@ export default function POS() {
                       <div className="mt-auto flex justify-between items-center gap-2 flex-wrap text-xs text-gray-500">
                         <span className="truncate">{product.code}</span>
                         <span className={`whitespace-nowrap ${(product.totalStock || 0) <= product.min_stock ? "text-error-500 font-bold" : ""}`}>
-                          Stock: {product.totalStock}
+                          Stok: {product.totalStock}
                         </span>
                       </div>
                     </div>
@@ -414,12 +414,12 @@ export default function POS() {
         {/* Right Side: Cart */}
         <div className="flex flex-col border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03] rounded-xl overflow-hidden shadow-sm h-[calc(100vh-120px)] lg:sticky top-20">
           <div className="p-3 border-b border-gray-200 dark:border-white/[0.05]">
-            <h2 className="text-base font-semibold text-gray-800 dark:text-white/90">Current Order</h2>
+            <h2 className="text-base font-semibold text-gray-800 dark:text-white/90">Pesanan Saat Ini</h2>
           </div>
           
           <div className="flex-1 overflow-y-auto p-3 space-y-2 min-h-0">
             {cart.length === 0 ? (
-              <div className="flex justify-center items-center h-full text-gray-500 text-sm">Cart is empty</div>
+              <div className="flex justify-center items-center h-full text-gray-500 text-sm italic">Keranjang kosong</div>
             ) : (
               cart.map((item) => (
                 <div key={item.id} className="flex justify-between items-start pb-3 border-b border-gray-100 dark:border-white/[0.05] last:border-0 p-2">
@@ -464,7 +464,7 @@ export default function POS() {
               </div>
               
               <div className="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
-                <span>Discount</span>
+                <span>Diskon</span>
                 <input 
                   type="number" 
                   value={discount || ""} 
@@ -475,7 +475,7 @@ export default function POS() {
               </div>
 
               <div className="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
-                <span>Tax</span>
+                <span>Pajak</span>
                 <input 
                   type="number" 
                   value={tax || ""} 
@@ -486,7 +486,7 @@ export default function POS() {
               </div>
 
               <div className="pt-2 border-t border-gray-200 dark:border-white/[0.05] flex justify-between items-end">
-                <span className="text-base font-medium text-gray-800 dark:text-white/90">Grand Total</span>
+                <span className="text-base font-medium text-gray-800 dark:text-white/90">Total Akhir</span>
                 <span className="text-lg font-bold text-brand-500">
                   Rp {grandTotal.toLocaleString()}
                 </span>
@@ -494,7 +494,7 @@ export default function POS() {
 
               <div className="pt-2 flex flex-col gap-2">
                 <div className="flex justify-between items-center gap-2 text-sm text-gray-800 dark:text-white/90">
-                  <span className="font-medium whitespace-nowrap">Cash Received</span>
+                  <span className="font-medium whitespace-nowrap">Tunai Diterima</span>
                   <input 
                     type="number" 
                     value={cashReceived || ""} 
@@ -505,7 +505,7 @@ export default function POS() {
                 </div>
                 {cashReceived > 0 && (
                   <div className={`flex justify-between items-center text-sm font-medium ${change >= 0 ? "text-success-600" : "text-error-500"}`}>
-                    <span>Change</span>
+                    <span>Kembalian</span>
                     <span className="text-base">Rp {change.toLocaleString()}</span>
                   </div>
                 )}
@@ -517,7 +517,7 @@ export default function POS() {
               onClick={handleCheckout}
               disabled={isProcessing || cart.length === 0 || cashReceived < grandTotal}
             >
-              {isProcessing ? "Processing..." : "Pay Order"}
+              {isProcessing ? "Memproses..." : "Bayar Pesanan"}
             </Button>
           </div>
         </div>

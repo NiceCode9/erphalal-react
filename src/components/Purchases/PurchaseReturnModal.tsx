@@ -65,23 +65,23 @@ export default function PurchaseReturnModal({
       if (error) throw error;
       setItems((data as any) || []);
     } catch (error: any) {
-      toast.error("Failed to load purchase items");
+      toast.error("Gagal memuat item pembelian");
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedItemId) return toast.error("Please select an item");
+    if (!selectedItemId) return toast.error("Silakan pilih barang");
     
     const item = items.find(i => i.id.toString() === selectedItemId);
     const qty = parseInt(returnQty);
     
     if (!item) return;
-    if (qty > item.quantity) return toast.error(`Cannot return more than purchased (${item.quantity})`);
+    if (qty > item.quantity) return toast.error(`Tidak dapat retur lebih dari jumlah yang dibeli (${item.quantity})`);
     
     const batch = item.stock_batches?.[0];
-    if (!batch) return toast.error("Stock batch not found for this item");
-    if (qty > batch.quantity) return toast.error(`Not enough stock available to return (Available: ${batch.quantity})`);
+    if (!batch) return toast.error("Batch stok tidak ditemukan untuk barang ini");
+    if (qty > batch.quantity) return toast.error(`Stok tidak cukup untuk diretur (Tersedia: ${batch.quantity})`);
 
     setLoading(true);
     try {
@@ -112,10 +112,10 @@ export default function PurchaseReturnModal({
         if (manualError) throw manualError;
       }
 
-      toast.success("Return processed successfully");
+      toast.success("Retur berhasil diproses");
       onSuccess();
     } catch (error: any) {
-      toast.error(error.message || "An error occurred while processing return");
+      toast.error(error.message || "Terjadi kesalahan saat memproses retur");
     } finally {
       setLoading(false);
     }
@@ -125,15 +125,15 @@ export default function PurchaseReturnModal({
     <Modal isOpen={isOpen} onClose={onClose} className="max-w-[500px]">
       <div className="px-6 py-8">
         <h2 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-          Purchase Return
+          Retur Pembelian
         </h2>
         <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
-          Return items for Purchase #{purchaseId}
+          Retur barang untuk Pembelian #{purchaseId}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="itemSelect">Select Item</Label>
+            <Label htmlFor="itemSelect">Pilih Barang</Label>
             <select
               id="itemSelect"
               value={selectedItemId}
@@ -141,17 +141,17 @@ export default function PurchaseReturnModal({
               className="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2 text-sm dark:border-gray-700 dark:text-white/90 focus:border-brand-300 focus:ring-brand-500/10"
               required
             >
-              <option value="">Select an item to return</option>
+              <option value="">Pilih barang untuk diretur</option>
               {items.map((item) => (
                 <option key={item.id} value={item.id}>
-                  {item.products?.name} (Bought: {item.quantity})
+                  {item.products?.name} (Dibeli: {item.quantity})
                 </option>
               ))}
             </select>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="qty">Return Quantity</Label>
+            <Label htmlFor="qty">Jumlah Retur</Label>
             <Input
               id="qty"
               type="number"
@@ -163,10 +163,10 @@ export default function PurchaseReturnModal({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="reason">Reason</Label>
+            <Label htmlFor="reason">Alasan</Label>
             <Input
               id="reason"
-              placeholder="e.g. Damaged, Wrong item"
+              placeholder="Misal: Rusak, Barang salah"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
             />
@@ -174,10 +174,10 @@ export default function PurchaseReturnModal({
 
           <div className="flex items-center justify-end gap-3 pt-4">
             <Button variant="outline" type="button" onClick={onClose}>
-              Cancel
+              Batal
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Processing..." : "Process Return"}
+              {loading ? "Memproses..." : "Proses Retur"}
             </Button>
           </div>
         </form>

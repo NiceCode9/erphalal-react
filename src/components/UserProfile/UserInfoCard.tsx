@@ -43,7 +43,7 @@ export default function UserInfoCard() {
       closeModal();
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Failed to update profile: " + (error as any).message);
+      alert("Gagal memperbarui profil: " + (error as any).message);
     }
   };
 
@@ -52,13 +52,13 @@ export default function UserInfoCard() {
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
-            Personal Information
+            Informasi Pribadi
           </h4>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
             <div>
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                First Name
+                Nama Depan
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
                 {user?.user_metadata?.first_name || "-"}
@@ -67,7 +67,7 @@ export default function UserInfoCard() {
 
             <div>
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Last Name
+                Nama Belakang
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
                 {user?.user_metadata?.last_name || "-"}
@@ -76,7 +76,7 @@ export default function UserInfoCard() {
 
             <div>
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Email address
+                Alamat Email
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
                 {user?.email}
@@ -85,7 +85,7 @@ export default function UserInfoCard() {
 
             <div>
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Phone
+                Telepon
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
                 {user?.user_metadata?.phone || "-"}
@@ -94,7 +94,7 @@ export default function UserInfoCard() {
 
             <div>
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Account Role
+                Peran Akun
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
                 {user?.user_metadata?.role || "Admin"}
@@ -130,10 +130,10 @@ export default function UserInfoCard() {
         <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
           <div className="px-2 pr-14">
             <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-              Edit Personal Information
+              Edit Informasi Pribadi
             </h4>
             <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
-              Update your details to keep your profile up-to-date.
+              Perbarui detail Anda untuk menjaga profil tetap mutakhir.
             </p>
           </div>
           <form onSubmit={handleSave} className="flex flex-col">
@@ -141,10 +141,10 @@ export default function UserInfoCard() {
               <div className="mt-2">
                 <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>First Name</Label>
+                    <Label>Nama Depan</Label>
                     <Input
                       type="text"
-                      placeholder="First Name"
+                      placeholder="Nama Depan"
                       value={formData.first_name}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setFormData({ ...formData, first_name: e.target.value })
@@ -153,10 +153,10 @@ export default function UserInfoCard() {
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>Last Name</Label>
+                    <Label>Nama Belakang</Label>
                     <Input
                       type="text"
-                      placeholder="Last Name"
+                      placeholder="Nama Belakang"
                       value={formData.last_name}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setFormData({ ...formData, last_name: e.target.value })
@@ -165,12 +165,12 @@ export default function UserInfoCard() {
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>Email Address</Label>
+                    <Label>Alamat Email</Label>
                     <Input type="text" value={user?.email || ""} disabled />
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>Phone Number</Label>
+                    <Label>Nomor Telepon</Label>
                     <Input
                       type="text"
                       placeholder="+00 000 000 00"
@@ -182,7 +182,7 @@ export default function UserInfoCard() {
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>Role</Label>
+                    <Label>Peran</Label>
                     <Input type="text" value={user?.user_metadata?.role || "Admin"} disabled />
                   </div>
                 </div>
@@ -190,10 +190,10 @@ export default function UserInfoCard() {
             </div>
             <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
               <Button size="sm" variant="outline" type="button" onClick={closeModal}>
-                Close
+                Tutup
               </Button>
               <Button size="sm" type="submit">
-                Save Changes
+                Simpan Perubahan
               </Button>
             </div>
           </form>

@@ -12,24 +12,24 @@ export default function Products() {
   return (
     <>
       <PageMeta
-        title="Products | Halal ERP"
-        description="Manage your POS products"
+        title="Produk | Halal ERP"
+        description="Kelola produk POS Anda"
       />
-      <PageBreadcrumb pageTitle="Products" />
+      <PageBreadcrumb pageTitle="Produk" />
       <div className="space-y-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white/90">
-              Product List
+              Daftar Produk
             </h2>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              Manage and organize your store's inventory.
+              Kelola dan atur inventaris toko Anda.
             </p>
           </div>
           <Link to="/products/create">
             <Button size="sm" className="flex items-center gap-2">
               <PlusIcon />
-              Add Product
+              Tambah Produk
             </Button>
           </Link>
         </div>

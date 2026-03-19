@@ -45,7 +45,7 @@ export default function EcommerceMetrics({
           <h4 className="mt-1 text-2xl font-black text-gray-800 dark:text-white/90">
             Rp {totalRevenue.toLocaleString("id-ID")}
           </h4>
-          <p className="mt-1 text-[10px] font-medium text-gray-400">vs last month</p>
+          <p className="mt-1 text-[10px] font-medium text-gray-400">vs bulan lalu</p>
         </div>
       </div>
 
@@ -85,7 +85,7 @@ export default function EcommerceMetrics({
           <h4 className={`mt-1 text-2xl font-black ${
             lowStockCount > 0 ? "text-warning-600" : "text-gray-800 dark:text-white/90"
           }`}>
-            {lowStockCount} <span className="text-sm font-bold text-gray-400 ml-1">Items</span>
+            {lowStockCount} <span className="text-sm font-bold text-gray-400 ml-1">Produk</span>
           </h4>
           <p className="mt-1 text-[10px] font-medium text-gray-400">Butuh restock segera</p>
         </div>
@@ -106,7 +106,7 @@ export default function EcommerceMetrics({
             </h4>
           </div>
           <div className="text-right">
-             <span className="text-[10px] font-bold text-gray-400 block uppercase">Categories</span>
+             <span className="text-[10px] font-bold text-gray-400 block uppercase">Kategori</span>
              <span className="text-sm font-black text-purple-600">{totalCategories}</span>
           </div>
         </div>

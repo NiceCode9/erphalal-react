@@ -90,7 +90,7 @@ export default function PurchaseTable({ refreshTrigger }: PurchaseTableProps) {
       setTotalCount(count || 0);
     } catch (error: any) {
       console.error(error);
-      toast.error("Failed to load purchases");
+      toast.error("Gagal memuat pembelian");
     } finally {
       setLoading(false);
     }
@@ -233,12 +233,12 @@ export default function PurchaseTable({ refreshTrigger }: PurchaseTableProps) {
         .eq("id", purchaseToDelete);
 
       if (error) throw error;
-      toast.success("Purchase deleted successfully");
+      toast.success("Pembelian berhasil dihapus");
       fetchPurchases();
     } catch (error: any) {
       toast.error(
         error.message ||
-          "Failed to delete purchase. Make sure there are no linked items or returns.",
+          "Gagal menghapus pembelian. Pastikan tidak ada item tertaut atau retur.",
       );
     } finally {
       setIsDeleteModalOpen(false);
@@ -298,19 +298,19 @@ export default function PurchaseTable({ refreshTrigger }: PurchaseTableProps) {
             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
               <TableRow>
                 <TableCell isHeader className="px-5 py-3 text-start">
-                  Date
+                  Tanggal
                 </TableCell>
                 <TableCell isHeader className="px-5 py-3 text-start">
                   Supplier
                 </TableCell>
                 <TableCell isHeader className="px-5 py-3 text-start">
-                  Total Amount
+                  Total Akhir
                 </TableCell>
                 <TableCell isHeader className="px-5 py-3 text-start">
-                  Notes
+                  Catatan
                 </TableCell>
                 <TableCell isHeader className="px-5 py-3 text-right">
-                  Actions
+                  Aksi
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -322,7 +322,7 @@ export default function PurchaseTable({ refreshTrigger }: PurchaseTableProps) {
                     <div className="flex items-center justify-center gap-2">
                       <div className="h-5 w-5 animate-spin rounded-full border-2 border-brand-500 border-t-transparent"></div>
                       <span className="text-sm font-medium text-gray-400">
-                        Loading purchases...
+                        Memuat pembelian...
                       </span>
                     </div>
                   </TableCell>
@@ -333,7 +333,7 @@ export default function PurchaseTable({ refreshTrigger }: PurchaseTableProps) {
                     colSpan={5}
                     className="px-5 py-10 text-center text-gray-500"
                   >
-                    No purchases found
+                    Pembelian tidak ditemukan
                   </TableCell>
                 </TableRow>
               ) : (
@@ -346,7 +346,7 @@ export default function PurchaseTable({ refreshTrigger }: PurchaseTableProps) {
                       {new Date(purchase.purchase_date).toLocaleDateString()}
                     </TableCell>
                     <TableCell className="px-5 py-4 text-gray-500 dark:text-gray-400">
-                      {purchase.suppliers?.name || "Unknown Supplier"}
+                      {purchase.suppliers?.name || "Supplier Tidak Diketahui"}
                     </TableCell>
                     <TableCell className="px-5 py-4 font-medium text-gray-800 dark:text-white">
                       Rp {purchase.total.toLocaleString()}
@@ -359,7 +359,7 @@ export default function PurchaseTable({ refreshTrigger }: PurchaseTableProps) {
                         <button
                           onClick={() => handleDownloadInvoice(purchase)}
                           className="text-gray-500 hover:text-brand-500"
-                          title="Download Invoice"
+                          title="Unduh Faktur"
                         >
                           <DownloadIcon className="size-5" />
                         </button>
@@ -369,7 +369,7 @@ export default function PurchaseTable({ refreshTrigger }: PurchaseTableProps) {
                             setIsReturnModalOpen(true);
                           }}
                           className="text-yellow-600 hover:text-yellow-700"
-                          title="Return Items"
+                          title="Retur Barang"
                         >
                           <ArrowUpIcon className="size-5" />
                         </button>
@@ -383,7 +383,7 @@ export default function PurchaseTable({ refreshTrigger }: PurchaseTableProps) {
                         <button
                           onClick={() => handleDeleteClick(purchase.id)}
                           className="text-error-500 hover:text-error-600"
-                          title="Delete"
+                          title="Hapus"
                         >
                           <TrashBinIcon className="size-5" />
                         </button>
@@ -400,15 +400,15 @@ export default function PurchaseTable({ refreshTrigger }: PurchaseTableProps) {
         {!loading && totalPages > 1 && (
           <div className="px-5 py-4 border-t border-gray-100 dark:border-white/[0.05] flex items-center justify-between">
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Showing{" "}
+              Menampilkan{" "}
               <span className="font-medium">
                 {(currentPage - 1) * itemsPerPage + 1}
               </span>{" "}
-              to{" "}
+              sampai{" "}
               <span className="font-medium">
                 {Math.min(currentPage * itemsPerPage, totalCount)}
               </span>{" "}
-              of <span className="font-medium">{totalCount}</span> results
+              dari <span className="font-medium">{totalCount}</span> hasil
             </p>
             <div className="flex gap-2">
               <button
@@ -416,14 +416,14 @@ export default function PurchaseTable({ refreshTrigger }: PurchaseTableProps) {
                 onClick={() => setCurrentPage((prev) => prev - 1)}
                 className="px-3 py-1 text-sm border rounded-md disabled:opacity-50"
               >
-                Previous
+                Sebelumnya
               </button>
               <button
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage((prev) => prev + 1)}
                 className="px-3 py-1 text-sm border rounded-md disabled:opacity-50"
               >
-                Next
+                Selanjutnya
               </button>
             </div>
           </div>
@@ -434,8 +434,8 @@ export default function PurchaseTable({ refreshTrigger }: PurchaseTableProps) {
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
-        title="Delete Purchase"
-        message="Are you sure you want to delete this purchase transaction? This may affect your stock batches."
+        title="Hapus Pembelian"
+        message="Apakah Anda yakin ingin menghapus transaksi pembelian ini? Ini dapat mempengaruhi batch stok Anda."
         variant="danger"
       />
 

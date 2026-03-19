@@ -86,12 +86,12 @@ export default function CategoryTable({ onEdit, refreshTrigger }: CategoryTableP
       const { error } = await supabase.from("categories").delete().eq("id", categoryToDelete);
       if (error) throw error;
       
-      toast.success("Category deleted successfully");
+      toast.success("Kategori berhasil dihapus");
       fetchCategories();
       setIsDeleteModalOpen(false);
     } catch (error: any) {
       console.error("Error deleting category:", error);
-      toast.error(error.message || "Failed to delete category");
+      toast.error(error.message || "Gagal menghapus kategori");
     } finally {
       setIsDeleting(false);
       setCategoryToDelete(null);
@@ -104,7 +104,7 @@ export default function CategoryTable({ onEdit, refreshTrigger }: CategoryTableP
         <div className="relative w-full max-w-sm">
           <input
             type="text"
-            placeholder="Search categories..."
+            placeholder="Cari kategori..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:text-white/90"
@@ -117,13 +117,13 @@ export default function CategoryTable({ onEdit, refreshTrigger }: CategoryTableP
           <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
             <TableRow>
               <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-                Name
+                Nama
               </TableCell>
               <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-                Description
+                Deskripsi
               </TableCell>
               <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-right">
-                Actions
+                Aksi
               </TableCell>
             </TableRow>
           </TableHeader>
@@ -132,13 +132,13 @@ export default function CategoryTable({ onEdit, refreshTrigger }: CategoryTableP
             {loading ? (
               <TableRow>
                 <TableCell colSpan={3} className="px-5 py-10 text-center text-gray-500">
-                  Loading categories...
+                  Memuat kategori...
                 </TableCell>
               </TableRow>
             ) : categories.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={3} className="px-5 py-10 text-center text-gray-500">
-                  No categories found.
+                  Kategori tidak ditemukan.
                 </TableCell>
               </TableRow>
             ) : (
@@ -162,7 +162,7 @@ export default function CategoryTable({ onEdit, refreshTrigger }: CategoryTableP
                         onClick={() => handleDeleteClick(category.id)}
                         className="text-error-500 hover:text-error-600"
                       >
-                        Delete
+                        Hapus
                       </button>
                     </div>
                   </TableCell>
@@ -177,9 +177,9 @@ export default function CategoryTable({ onEdit, refreshTrigger }: CategoryTableP
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={confirmDelete}
-        title="Delete Category"
-        message="Are you sure you want to delete this category? This action cannot be undone."
-        confirmLabel="Delete"
+        title="Hapus Kategori"
+        message="Apakah Anda yakin ingin menghapus kategori ini? Tindakan ini tidak dapat dibatalkan."
+        confirmLabel="Hapus"
         isLoading={isDeleting}
       />
 
@@ -188,15 +188,15 @@ export default function CategoryTable({ onEdit, refreshTrigger }: CategoryTableP
         <div className="flex flex-col items-center justify-between gap-4 border-t border-gray-100 p-5 dark:border-white/[0.05] sm:flex-row lg:p-6">
           <div className="flex items-center gap-4">
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Showing <span className="font-medium text-gray-800 dark:text-white">{(currentPage - 1) * itemsPerPage + 1}</span> to{" "}
+              Menampilkan <span className="font-medium text-gray-800 dark:text-white">{(currentPage - 1) * itemsPerPage + 1}</span> sampai{" "}
               <span className="font-medium text-gray-800 dark:text-white">
                 {Math.min(currentPage * itemsPerPage, totalCount)}
               </span>{" "}
-              of <span className="font-medium text-gray-800 dark:text-white">{totalCount}</span> entries
+              of <span className="font-medium text-gray-800 dark:text-white">{totalCount}</span> entri
             </p>
             
             <div className="flex items-center gap-2">
-              <label htmlFor="pageSize" className="text-sm text-gray-500 dark:text-gray-400">Rows:</label>
+              <label htmlFor="pageSize" className="text-sm text-gray-500 dark:text-gray-400">Baris:</label>
               <select
                 id="pageSize"
                 value={itemsPerPage}

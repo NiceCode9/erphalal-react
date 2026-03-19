@@ -61,30 +61,30 @@ export default function Users() {
   return (
     <>
       <PageMeta
-        title="User Management | Halal ERP"
-        description="Manage users and roles"
+        title="Manajemen Pengguna | Halal ERP"
+        description="Kelola pengguna dan peran"
       />
-      <PageBreadcrumb pageTitle="User Profiles" />
+      <PageBreadcrumb pageTitle="Profil Pengguna" />
 
       <div className="space-y-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white/90">
-              Users & Roles
+              Pengguna & Peran
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Manage system users, contact info, and role permissions.
+              Kelola pengguna sistem, info kontak, dan izin peran.
             </p>
           </div>
           <div>
             {isSuperadmin ? (
               <Button size="sm" className="flex items-center gap-2" onClick={() => setIsAddModalOpen(true)}>
                 <PlusIcon />
-                Add User
+                Tambah Pengguna
               </Button>
             ) : (
               <p className="text-sm text-gray-500 italic mt-2">
-                Only superadmin can add new users.
+                Hanya superadmin yang dapat menambah pengguna baru.
               </p>
             )}
           </div>

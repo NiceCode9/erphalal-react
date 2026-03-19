@@ -34,19 +34,19 @@ export default function Suppliers() {
   return (
     <>
       <PageMeta
-        title="Suppliers | Halal ERP"
-        description="Supplier management page"
+        title="Supplier | Halal ERP"
+        description="Halaman manajemen supplier"
       />
-      <PageBreadcrumb pageTitle="Suppliers" />
+      <PageBreadcrumb pageTitle="Supplier" />
 
       <div className="space-y-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white/90">
-              Supplier List
+              Daftar Supplier
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Manage your suppliers and their contact information
+              Kelola supplier dan informasi kontak mereka
             </p>
           </div>
           <Button 
@@ -55,7 +55,7 @@ export default function Suppliers() {
             className="flex items-center gap-2"
           >
             <PlusIcon />
-            Add Supplier
+            Tambah Supplier
           </Button>
         </div>
 

@@ -68,7 +68,7 @@ export default function SupplierModal({
         setAddress(data.address || "");
       }
     } catch (error: any) {
-      toast.error("Failed to fetch supplier details");
+      toast.error("Gagal mengambil detail supplier");
       onClose();
     } finally {
       setFetching(false);
@@ -95,13 +95,13 @@ export default function SupplierModal({
           .update(supplierData)
           .eq("id", supplierId);
         if (error) throw error;
-        toast.success("Supplier updated successfully");
+        toast.success("Supplier berhasil diperbarui");
       } else {
         const { error } = await supabase
           .from("suppliers")
           .insert([supplierData]);
         if (error) throw error;
-        toast.success("Supplier created successfully");
+        toast.success("Supplier berhasil dibuat");
       }
       onSuccess();
     } catch (error: any) {
@@ -115,10 +115,10 @@ export default function SupplierModal({
     <Modal isOpen={isOpen} onClose={onClose} className="max-w-[600px]">
       <div className="no-scrollbar max-h-screen overflow-y-auto px-6 py-8">
         <h2 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-          {isEdit ? "Edit Supplier" : "Add Supplier"}
+          {isEdit ? "Edit Supplier" : "Tambah Supplier"}
         </h2>
         <p className="mb-8 text-sm text-gray-500 dark:text-gray-400">
-          {isEdit ? "Update supplier information" : "Add a new supplier to your list"}
+          {isEdit ? "Perbarui informasi supplier" : "Tambah supplier baru ke daftar Anda"}
         </p>
 
         {fetching ? (
@@ -128,10 +128,10 @@ export default function SupplierModal({
         ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="supplierName">Supplier Name <span className="text-error-500">*</span></Label>
+              <Label htmlFor="supplierName">Nama Supplier <span className="text-error-500">*</span></Label>
               <Input
                 id="supplierName"
-                placeholder="e.g. PT Artha Prima"
+                placeholder="Misal: PT Artha Prima"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -140,20 +140,20 @@ export default function SupplierModal({
 
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="contact">Contact Person</Label>
+                <Label htmlFor="contact">Person Kontak</Label>
                 <Input
                   id="contact"
-                  placeholder="e.g. John Doe"
+                  placeholder="Misal: John Doe"
                   value={contact}
                   onChange={(e) => setContact(e.target.value)}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
+                <Label htmlFor="phone">Nomor Telepon</Label>
                 <Input
                   id="phone"
-                  placeholder="e.g. 0812..."
+                  placeholder="Misal: 0812..."
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
@@ -161,21 +161,21 @@ export default function SupplierModal({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
+              <Label htmlFor="email">Alamat Email</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="e.g. supplier@example.com"
+                placeholder="Misal: supplier@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="address">Address</Label>
+              <Label htmlFor="address">Alamat</Label>
               <TextArea
                 id="address"
-                placeholder="Full address..."
+                placeholder="Alamat lengkap..."
                 value={address}
                 onChange={(val) => setAddress(val)}
                 rows={3}
@@ -184,10 +184,10 @@ export default function SupplierModal({
 
             <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-white/[0.05]">
               <Button variant="outline" type="button" onClick={onClose}>
-                Cancel
+                Batal
               </Button>
               <Button type="submit" disabled={loading}>
-                {loading ? "Saving..." : isEdit ? "Save Changes" : "Add Supplier"}
+                {loading ? "Menyimpan..." : isEdit ? "Simpan Perubahan" : "Tambah Supplier"}
               </Button>
             </div>
           </form>

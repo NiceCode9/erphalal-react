@@ -34,23 +34,23 @@ export default function Categories() {
   return (
     <>
       <PageMeta
-        title="Product Categories | POS Terminal"
-        description="Manage your POS product categories."
+        title="Kategori Produk | Halal ERP"
+        description="Kelola kategori produk POS Anda."
       />
-      <PageBreadcrumb pageTitle="Product Categories" />
+      <PageBreadcrumb pageTitle="Kategori Produk" />
       
       <div className="space-y-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-xl font-semibold text-gray-800 dark:text-white/90">
-              Categories
+              Kategori
             </h3>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              Manage product categories for better organization.
+              Kelola kategori produk untuk pengaturan yang lebih baik.
             </p>
           </div>
           <Button size="sm" onClick={handleCreate}>
-            Add Category
+            Tambah Kategori
           </Button>
         </div>
 

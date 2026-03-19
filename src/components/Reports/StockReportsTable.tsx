@@ -63,7 +63,7 @@ export default function StockReportsTable() {
       setProducts(processed);
     } catch (err: any) {
       console.error(err);
-      toast.error("Failed to load stock data");
+      toast.error("Gagal memuat data stok");
     } finally {
       setLoading(false);
     }
@@ -138,10 +138,10 @@ export default function StockReportsTable() {
     const tableRows = filteredProducts.map(p => [
       p.name,
       p.code,
-      p.categories?.name || "Uncategorized",
+      p.categories?.name || "Tanpa Kategori",
       (p.totalStock || 0).toString(),
       p.halal_expired ? new Date(p.halal_expired).toLocaleDateString('id-ID') : "N/A",
-      (p.totalStock || 0) <= 0 ? "OUT" : (p.totalStock || 0) <= p.min_stock ? "LOW" : "SAFE"
+      (p.totalStock || 0) <= 0 ? "HABIS" : (p.totalStock || 0) <= p.min_stock ? "RENDAH" : "AMAN"
     ]);
 
     autoTable(doc, {
@@ -275,7 +275,7 @@ export default function StockReportsTable() {
               <Button 
                 className="w-full h-12 !rounded-2xl active:scale-95 transition-all shadow-lg shadow-brand-500/20 font-bold"
               >
-                Apply
+                Terapkan
               </Button>
             </div>
           </div>
@@ -331,7 +331,7 @@ export default function StockReportsTable() {
                       </TableCell>
                       <TableCell className="!px-6 !py-5 border-l border-gray-50 dark:border-white/[0.05]">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-gray-400">
-                          {p.categories?.name || "Uncategorized"}
+                          {p.categories?.name || "Tanpa Kategori"}
                         </span>
                       </TableCell>
                       <TableCell className="!px-6 !py-5 text-right">
@@ -350,18 +350,18 @@ export default function StockReportsTable() {
                              </div>
                              <div className="flex flex-col">
                                <span className={`text-[10px] font-bold uppercase tracking-wider ${isHalalExpired ? "text-error-500" : "text-success-600"}`}>
-                                 {isHalalExpired ? "Expired" : "Sertifikasi Valid"}
+                                 {isHalalExpired ? "Kedaluwarsa" : "Sertifikasi Valid"}
                                </span>
                                <span className="text-[10px] text-gray-400 font-medium whitespace-nowrap">Hingga: {new Date(p.halal_expired).toLocaleDateString('id-ID', { dateStyle: 'medium' })}</span>
                              </div>
                            </div>
                          ) : (
-                           <span className="text-[10px] font-bold text-gray-300 italic">No Data</span>
+                           <span className="text-[10px] font-bold text-gray-300 italic">Tanpa Data</span>
                          )}
                       </TableCell>
                       <TableCell className="!px-6 !py-5 text-right">
                         <Badge size="sm" color={status === "out" ? "error" : status === "low" ? "warning" : "success"} className="!rounded-lg shadow-sm">
-                          {status === "out" ? "OUT OF STOCK" : status === "low" ? "LOW STOCK" : "SAFE LEVEL"}
+                          {status === "out" ? "STOK HABIS" : status === "low" ? "STOK RENDAH" : "LEVEL AMAN"}
                         </Badge>
                       </TableCell>
                     </TableRow>

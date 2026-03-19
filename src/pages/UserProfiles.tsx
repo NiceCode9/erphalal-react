@@ -7,13 +7,13 @@ export default function UserProfiles() {
   return (
     <>
       <PageMeta
-        title="User Profile | POS Terminal"
-        description="Manage your POS terminal user profile and personal information."
+        title="Profil Pengguna | Halal ERP"
+        description="Kelola profil pengguna dan informasi pribadi Anda."
       />
-      <PageBreadcrumb pageTitle="Profile" />
+      <PageBreadcrumb pageTitle="Profil" />
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
         <h3 className="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
-          User Profile Settings
+          Pengaturan Profil Pengguna
         </h3>
         <div className="space-y-6">
           <UserMetaCard />

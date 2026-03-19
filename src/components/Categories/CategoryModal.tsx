@@ -48,7 +48,7 @@ export default function CategoryModal({
           .eq("id", category.id);
 
         if (updateError) throw updateError;
-        toast.success("Category updated successfully");
+        toast.success("Kategori berhasil diperbarui");
       } else {
         // Insert
         const { error: insertError } = await supabase
@@ -56,14 +56,14 @@ export default function CategoryModal({
           .insert([{ name, description }]);
 
         if (insertError) throw insertError;
-        toast.success("Category created successfully");
+        toast.success("Kategori berhasil dibuat");
       }
 
       onSuccess();
       onClose();
     } catch (err: any) {
       console.error("Error saving category:", err);
-      toast.error(err.message || "Failed to save category");
+      toast.error(err.message || "Gagal menyimpan kategori");
     } finally {
       setLoading(false);
     }
@@ -74,12 +74,12 @@ export default function CategoryModal({
       <div className="no-scrollbar relative w-full max-w-[500px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
         <div className="px-2 pr-14">
           <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-            {category ? "Edit Category" : "Add New Category"}
+            {category ? "Edit Kategori" : "Tambah Kategori Baru"}
           </h4>
           <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
             {category
-              ? "Update the category details below."
-              : "Create a new category for your POS products."}
+              ? "Perbarui detail kategori di bawah ini."
+              : "Buat kategori baru untuk produk POS Anda."}
           </p>
         </div>
 
@@ -88,11 +88,11 @@ export default function CategoryModal({
             <div className="space-y-5">
               <div>
                 <Label>
-                  Category Name<span className="text-error-500">*</span>
+                  Nama Kategori<span className="text-error-500">*</span>
                 </Label>
                 <Input
                   type="text"
-                  placeholder="e.g. Beverages"
+                  placeholder="Misal: Minuman"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
@@ -100,9 +100,9 @@ export default function CategoryModal({
               </div>
 
               <div>
-                <Label>Description</Label>
+                <Label>Deskripsi</Label>
                 <TextArea
-                  placeholder="Brief description of the category..."
+                  placeholder="Deskripsi singkat kategori..."
                   value={description}
                   onChange={(val) => setDescription(val)}
                   rows={4}
@@ -113,10 +113,10 @@ export default function CategoryModal({
 
           <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
             <Button size="sm" variant="outline" type="button" onClick={onClose}>
-              Cancel
+              Batal
             </Button>
             <Button size="sm" type="submit" disabled={loading}>
-              {loading ? "Saving..." : category ? "Save Changes" : "Add Category"}
+              {loading ? "Menyimpan..." : category ? "Simpan Perubahan" : "Tambah Kategori"}
             </Button>
           </div>
         </form>

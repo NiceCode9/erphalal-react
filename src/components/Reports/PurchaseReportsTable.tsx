@@ -293,7 +293,7 @@ export default function PurchaseReportsTable() {
                 {loading ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
-                  "Apply"
+                  "Terapkan"
                 )}
               </Button>
             </div>
@@ -321,7 +321,7 @@ export default function PurchaseReportsTable() {
               </svg>
             </div>
             <span className="text-[10px] font-bold py-1 px-2 rounded-full bg-success-100 text-success-700">
-              Total Purchase
+              Total Pembelian
             </span>
           </div>
           <h3 className="text-3xl font-black text-gray-900 dark:text-white">
@@ -350,7 +350,7 @@ export default function PurchaseReportsTable() {
               </svg>
             </div>
             <span className="text-[10px] font-bold py-1 px-2 rounded-full bg-orange-100 text-orange-700">
-              Transactions
+              Transaksi
             </span>
           </div>
           <h3 className="text-3xl font-black text-gray-900 dark:text-white">

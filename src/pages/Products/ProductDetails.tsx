@@ -77,7 +77,7 @@ export default function ProductDetails() {
       setStockBatches(batchData || []);
     } catch (err: any) {
       console.error("Error fetching product details:", err);
-      toast.error("Failed to fetch product details");
+      toast.error("Gagal mengambil detail produk");
     } finally {
       setLoading(false);
     }
@@ -94,7 +94,7 @@ export default function ProductDetails() {
   if (!product) {
     return (
       <div className="flex h-96 items-center justify-center">
-        <p className="text-gray-500">Product not found.</p>
+        <p className="text-gray-500">Produk tidak ditemukan.</p>
       </div>
     );
   }
@@ -102,42 +102,42 @@ export default function ProductDetails() {
   return (
     <>
       <PageMeta
-        title={`Product Details: ${product.name} | Halal ERP`}
-        description="View product details and stock batches"
+        title={`Detail Produk: ${product.name} | Halal ERP`}
+        description="Lihat detail produk dan batch stok"
       />
-      <PageBreadcrumb pageTitle="Product Details" />
+      <PageBreadcrumb pageTitle="Detail Produk" />
 
       <div className="space-y-6">
         {/* Product Information Card */}
         <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-white/[0.05] dark:bg-white/[0.03]">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-xl font-medium text-gray-800 dark:text-white/90">
-              Product Information
+              Informasi Produk
             </h3>
             <Link to={`/products/${product.id}/edit`}>
               <Button size="sm" variant="outline">
-                Edit Product
+                Edit Produk
               </Button>
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div>
-                <p className="text-sm text-gray-500">Name</p>
+                <p className="text-sm text-gray-500">Nama</p>
                 <p className="font-medium text-gray-800 dark:text-white/90">{product.name}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Internal Code</p>
+                <p className="text-sm text-gray-500">Kode Internal</p>
                 <p className="font-medium text-gray-800 dark:text-white/90">{product.code}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Category</p>
+                <p className="text-sm text-gray-500">Kategori</p>
                 <p className="font-medium text-gray-800 dark:text-white/90">
-                  {product.categories?.name || "Uncategorized"}
+                  {product.categories?.name || "Tanpa Kategori"}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Unit</p>
+                <p className="text-sm text-gray-500">Satuan</p>
                 <p className="font-medium text-gray-800 dark:text-white/90">{product.unit || "-"}</p>
               </div>
               <div>
@@ -148,13 +148,13 @@ export default function ProductDetails() {
 
             <div className="space-y-4">
               <div>
-                <p className="text-sm text-gray-500">Selling Price</p>
+                <p className="text-sm text-gray-500">Harga Jual</p>
                 <p className="font-medium text-gray-800 dark:text-white/90">
                   Rp {product.selling_price.toLocaleString()}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Minimum Stock</p>
+                <p className="text-sm text-gray-500">Stok Minimum</p>
                 <p className="font-medium text-gray-800 dark:text-white/90">{product.min_stock}</p>
               </div>
               <div>
@@ -166,7 +166,7 @@ export default function ProductDetails() {
                       : "bg-error-50 text-error-600"
                   }`}
                 >
-                  {product.status ? "Active" : "Inactive"}
+                  {product.status ? "Aktif" : "Tidak Aktif"}
                 </span>
               </div>
             </div>
@@ -176,23 +176,23 @@ export default function ProductDetails() {
         {/* Halal Certification Card */}
         <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-white/[0.05] dark:bg-white/[0.03]">
           <h3 className="mb-6 text-xl font-medium text-gray-800 dark:text-white/90">
-            Halal Certification
+            Sertifikasi Halal
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <p className="text-sm text-gray-500">Certificate Number</p>
+              <p className="text-sm text-gray-500">Nomor Sertifikat</p>
               <p className="font-medium text-gray-800 dark:text-white/90">
                 {product.halal_certificate_number || "-"}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Certification Agency</p>
+              <p className="text-sm text-gray-500">Lembaga Sertifikasi</p>
               <p className="font-medium text-gray-800 dark:text-white/90">
                 {product.certification_agency || "-"}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Expiry Date</p>
+              <p className="text-sm text-gray-500">Tanggal Kedaluwarsa</p>
               <p className="font-medium text-gray-800 dark:text-white/90">
                 {product.halal_expired || "-"}
               </p>
@@ -203,25 +203,25 @@ export default function ProductDetails() {
         {/* Stock Batches Card */}
         <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-white/[0.05] dark:bg-white/[0.03]">
           <h3 className="mb-6 text-xl font-medium text-gray-800 dark:text-white/90">
-            Stock Batches
+            Batch Stok
           </h3>
           <div className="overflow-hidden rounded-lg border border-gray-100 dark:border-white/[0.05]">
             <div className="max-w-full overflow-x-auto">
               <Table>
                 <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                   <TableRow>
-                    <TableCell isHeader className="px-5 py-3 text-start">Batch ID</TableCell>
-                    <TableCell isHeader className="px-5 py-3 text-start">Quantity</TableCell>
-                    <TableCell isHeader className="px-5 py-3 text-start">Purchase Price</TableCell>
-                    <TableCell isHeader className="px-5 py-3 text-start">Expiry Date</TableCell>
-                    <TableCell isHeader className="px-5 py-3 text-start">Date Added</TableCell>
+                    <TableCell isHeader className="px-5 py-3 text-start">ID Batch</TableCell>
+                    <TableCell isHeader className="px-5 py-3 text-start">Jumlah</TableCell>
+                    <TableCell isHeader className="px-5 py-3 text-start">Harga Beli</TableCell>
+                    <TableCell isHeader className="px-5 py-3 text-start">Tanggal Kedaluwarsa</TableCell>
+                    <TableCell isHeader className="px-5 py-3 text-start">Tanggal Ditambahkan</TableCell>
                   </TableRow>
                 </TableHeader>
                 <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
                   {stockBatches.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={5} className="py-6 text-center text-gray-500">
-                        No stock batches found for this product.
+                        Tidak ada batch stok ditemukan untuk produk ini.
                       </TableCell>
                     </TableRow>
                   ) : (

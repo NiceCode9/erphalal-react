@@ -59,7 +59,7 @@ export default function SalesReportsTable() {
       setSales(data || []);
     } catch (err: any) {
       console.error(err);
-      toast.error("Failed to load sales data");
+      toast.error("Gagal memuat data penjualan");
     } finally {
       setLoading(false);
     }
@@ -347,7 +347,7 @@ export default function SalesReportsTable() {
                 {loading ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mx-auto" />
                 ) : (
-                  "Apply"
+                  "Terapkan"
                 )}
               </Button>
             </div>
@@ -362,7 +362,7 @@ export default function SalesReportsTable() {
             <div className="p-3 rounded-2xl bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400 group-hover:scale-110 transition-transform">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
-            <span className="text-[10px] font-bold py-1 px-2 rounded-full bg-success-100 text-success-700 dark:bg-success-500/10 dark:text-success-400 ring-4 ring-success-500/5">Revenue</span>
+            <span className="text-[10px] font-bold py-1 px-2 rounded-full bg-success-100 text-success-700 dark:bg-success-500/10 dark:text-success-400 ring-4 ring-success-500/5">Pendapatan</span>
           </div>
           <h3 className="text-3xl font-black tracking-tight text-gray-900 dark:text-white">Rp {totalRevenue.toLocaleString()}</h3>
           <p className="text-sm text-gray-500 mt-1 uppercase font-semibold text-[10px] tracking-widest">Total Penjualan Bersih</p>
@@ -373,7 +373,7 @@ export default function SalesReportsTable() {
             <div className="p-3 rounded-2xl bg-error-50 text-error-600 dark:bg-error-500/10 dark:text-error-400 group-hover:scale-110 transition-transform">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5z" /></svg>
             </div>
-            <span className="text-[10px] font-bold py-1 px-2 rounded-full bg-error-100 text-error-700 dark:bg-error-500/10 dark:text-error-400 ring-4 ring-error-500/5">Discounts</span>
+            <span className="text-[10px] font-bold py-1 px-2 rounded-full bg-error-100 text-error-700 dark:bg-error-500/10 dark:text-error-400 ring-4 ring-error-500/5">Diskon</span>
           </div>
           <h3 className="text-3xl font-black tracking-tight text-gray-900 dark:text-white">Rp {totalDiscount.toLocaleString()}</h3>
           <p className="text-sm text-gray-500 mt-1 uppercase font-semibold text-[10px] tracking-widest">Potongan Harga Diberikan</p>
@@ -384,7 +384,7 @@ export default function SalesReportsTable() {
             <div className="p-3 rounded-2xl bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-white/60 group-hover:scale-110 transition-transform">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
             </div>
-            <span className="text-[10px] font-bold py-1 px-2 rounded-full bg-gray-200 text-gray-700 dark:bg-white/10 dark:text-white/60">Tax & Fees</span>
+            <span className="text-[10px] font-bold py-1 px-2 rounded-full bg-gray-200 text-gray-700 dark:bg-white/10 dark:text-white/60">Pajak & Biaya</span>
           </div>
           <h3 className="text-3xl font-black tracking-tight text-gray-900 dark:text-white">Rp {totalTax.toLocaleString()}</h3>
           <p className="text-sm text-gray-500 mt-1 uppercase font-semibold text-[10px] tracking-widest">Total Pajak & Biaya Layanan</p>
@@ -397,12 +397,12 @@ export default function SalesReportsTable() {
           <Table>
             <TableHeader className="bg-gray-50/50 dark:bg-white/[0.01]">
               <TableRow>
-                <TableCell isHeader className="!px-6 !py-5 uppercase text-[10px] font-black tracking-widest text-gray-400">Invoice Info</TableCell>
+                <TableCell isHeader className="!px-6 !py-5 uppercase text-[10px] font-black tracking-widest text-gray-400">Info Invoice</TableCell>
                 <TableCell isHeader className="!px-6 !py-5 uppercase text-[10px] font-black tracking-widest text-gray-400">Waktu Transaksi</TableCell>
                 <TableCell isHeader className="!px-6 !py-5 uppercase text-[10px] font-black tracking-widest text-gray-400">Petugas Kasir</TableCell>
-                <TableCell isHeader className="!px-6 !py-5 uppercase text-[10px] font-black tracking-widest text-gray-400 text-right">Discount</TableCell>
-                <TableCell isHeader className="!px-6 !py-5 uppercase text-[10px] font-black tracking-widest text-gray-400 text-right">Tax</TableCell>
-                <TableCell isHeader className="!px-6 !py-5 uppercase text-[10px] font-black tracking-widest text-gray-400 text-right">Grand Total</TableCell>
+                <TableCell isHeader className="!px-6 !py-5 uppercase text-[10px] font-black tracking-widest text-gray-400 text-right">Diskon</TableCell>
+                <TableCell isHeader className="!px-6 !py-5 uppercase text-[10px] font-black tracking-widest text-gray-400 text-right">Pajak</TableCell>
+                <TableCell isHeader className="!px-6 !py-5 uppercase text-[10px] font-black tracking-widest text-gray-400 text-right">Total Akhir</TableCell>
                 <TableCell isHeader className="!px-6 !py-5 uppercase text-[10px] font-black tracking-widest text-gray-400 text-right">Aksi</TableCell>
               </TableRow>
             </TableHeader>

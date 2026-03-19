@@ -29,7 +29,7 @@ const navItems: NavItem[] = [
   },
   {
     icon: <TaskIcon />,
-    name: "Purchases",
+    name: "Pembelian",
     path: "/purchases",
   },
   {
@@ -39,27 +39,27 @@ const navItems: NavItem[] = [
   },
   {
     icon: <BoxIcon />,
-    name: "Products",
+    name: "Produk",
     path: "/products",
   },
   {
     icon: <GridIcon />,
-    name: "Categories",
+    name: "Kategori",
     path: "/categories",
   },
   {
     icon: <GroupIcon />,
-    name: "Suppliers",
+    name: "Supplier",
     path: "/suppliers",
   },
   {
     icon: <GroupIcon />,
-    name: "Users",
+    name: "Pengguna",
     path: "/users",
   },
   {
     icon: <UserCircleIcon />,
-    name: "User Profile",
+    name: "Profil Pengguna",
     path: "/profile",
   },
   {

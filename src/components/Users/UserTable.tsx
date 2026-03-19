@@ -68,7 +68,7 @@ export default function UserTable({ onEdit, refreshTrigger }: UserTableProps) {
       setTotalCount(data?.length || 0);
     } catch (error: any) {
       console.error(error);
-      toast.error(`Failed to load users: ${error.message || error.details || JSON.stringify(error)}`);
+      toast.error(`Gagal memuat pengguna: ${error.message || error.details || JSON.stringify(error)}`);
     } finally {
       setLoading(false);
     }
@@ -91,10 +91,10 @@ export default function UserTable({ onEdit, refreshTrigger }: UserTableProps) {
         .eq("id", profileToDelete);
 
       if (error) throw error;
-      toast.success("User profile deleted successfully");
+      toast.success("Profil pengguna berhasil dihapus");
       fetchProfiles();
     } catch (error: any) {
-      toast.error(error.message || "Failed to delete user profile");
+      toast.error(error.message || "Gagal menghapus profil pengguna");
     } finally {
       setIsDeleteModalOpen(false);
       setProfileToDelete(null);
@@ -107,7 +107,7 @@ export default function UserTable({ onEdit, refreshTrigger }: UserTableProps) {
         <div className="max-w-sm">
           <input
             type="text"
-            placeholder="Search users..."
+            placeholder="Cari pengguna..."
             className="h-10 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2 text-sm dark:border-gray-700 dark:text-white/90 focus:border-brand-300 focus:ring-brand-500/10"
             value={searchTerm}
             onChange={(e) => {
@@ -122,11 +122,11 @@ export default function UserTable({ onEdit, refreshTrigger }: UserTableProps) {
         <Table>
           <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
             <TableRow>
-              <TableCell isHeader className="px-5 py-3 text-start">Name</TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start">Role</TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start">Phone</TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start">Last Updated</TableCell>
-              <TableCell isHeader className="px-5 py-3 text-right">Actions</TableCell>
+              <TableCell isHeader className="px-5 py-3 text-start">Nama</TableCell>
+              <TableCell isHeader className="px-5 py-3 text-start">Peran</TableCell>
+              <TableCell isHeader className="px-5 py-3 text-start">Telepon</TableCell>
+              <TableCell isHeader className="px-5 py-3 text-start">Terakhir Diperbarui</TableCell>
+              <TableCell isHeader className="px-5 py-3 text-right">Aksi</TableCell>
             </TableRow>
           </TableHeader>
 
@@ -136,21 +136,21 @@ export default function UserTable({ onEdit, refreshTrigger }: UserTableProps) {
                 <TableCell colSpan={5} className="px-5 py-10 text-center">
                   <div className="flex items-center justify-center gap-2">
                     <div className="h-5 w-5 animate-spin rounded-full border-2 border-brand-500 border-t-transparent"></div>
-                    <span className="text-sm font-medium text-gray-400">Loading users...</span>
+                    <span className="text-sm font-medium text-gray-400">Memuat pengguna...</span>
                   </div>
                 </TableCell>
               </TableRow>
             ) : profiles.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="px-5 py-10 text-center text-gray-500">
-                  No users found
+                  Tidak ada pengguna ditemukan
                 </TableCell>
               </TableRow>
             ) : (
               profiles.map((profile) => (
                 <TableRow key={profile.id} className="border-b border-gray-100 last:border-0 dark:border-white/[0.05]">
                   <TableCell className="px-5 py-4 font-medium text-gray-800 dark:text-white/90">
-                    {profile.full_name || `${profile.first_name || ""} ${profile.last_name || ""}`.trim() || "Unknown"}
+                    {profile.full_name || `${profile.first_name || ""} ${profile.last_name || ""}`.trim() || "Tidak Diketahui"}
                   </TableCell>
                   <TableCell className="px-5 py-4 text-gray-500 dark:text-gray-400">
                     <Badge size="sm" color={profile.role === "superadmin" ? "success" : "info"}>
@@ -175,7 +175,7 @@ export default function UserTable({ onEdit, refreshTrigger }: UserTableProps) {
                       <button 
                         onClick={() => handleDeleteClick(profile.id)}
                         className="text-error-500 hover:text-error-600"
-                        title="Delete"
+                        title="Hapus"
                       >
                         <TrashBinIcon className="size-5" />
                       </button>
@@ -191,7 +191,7 @@ export default function UserTable({ onEdit, refreshTrigger }: UserTableProps) {
       {!loading && totalPages > 1 && (
         <div className="px-5 py-4 border-t border-gray-100 dark:border-white/[0.05] flex items-center justify-between">
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Showing <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-medium">{Math.min(currentPage * itemsPerPage, totalCount)}</span> of <span className="font-medium">{totalCount}</span> results
+            Menampilkan <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span> sampai <span className="font-medium">{Math.min(currentPage * itemsPerPage, totalCount)}</span> dari <span className="font-medium">{totalCount}</span> hasil
           </p>
           <div className="flex gap-2">
             <Button
@@ -200,7 +200,7 @@ export default function UserTable({ onEdit, refreshTrigger }: UserTableProps) {
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(prev => prev - 1)}
             >
-              Previous
+              Sebelumnya
             </Button>
             <Button
               size="sm"
@@ -208,7 +208,7 @@ export default function UserTable({ onEdit, refreshTrigger }: UserTableProps) {
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage(prev => prev + 1)}
             >
-              Next
+              Berikutnya
             </Button>
           </div>
         </div>
@@ -218,8 +218,8 @@ export default function UserTable({ onEdit, refreshTrigger }: UserTableProps) {
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
-        title="Remove User Access"
-        message="Are you sure you want to delete this user profile? This action will remove their profile data."
+        title="Hapus Akses Pengguna"
+        message="Apakah Anda yakin ingin menghapus profil pengguna ini? Tindakan ini akan menghapus data profil mereka."
         variant="danger"
       />
     </div>

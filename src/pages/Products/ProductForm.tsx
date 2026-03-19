@@ -51,7 +51,7 @@ export default function ProductForm() {
       .select("id, name")
       .order("name");
     if (error) {
-      toast.error("Failed to load categories");
+      toast.error("Gagal memuat kategori");
     } else {
       setCategories(data || []);
     }
@@ -80,7 +80,7 @@ export default function ProductForm() {
         setHalalExpired(data.halal_expired || "");
       }
     } catch (err: any) {
-      toast.error("Failed to fetch product details");
+      toast.error("Gagal mengambil detail produk");
       navigate("/products");
     } finally {
       setFetching(false);
@@ -113,13 +113,13 @@ export default function ProductForm() {
           .update(productData)
           .eq("id", id);
         if (error) throw error;
-        toast.success("Product updated successfully");
+        toast.success("Produk berhasil diperbarui");
       } else {
         const { error } = await supabase
           .from("products")
           .insert([productData]);
         if (error) throw error;
-        toast.success("Product created successfully");
+        toast.success("Produk berhasil dibuat");
       }
       navigate("/products");
     } catch (err: any) {
@@ -140,22 +140,22 @@ export default function ProductForm() {
   return (
     <>
       <PageMeta
-        title={`${isEdit ? "Edit" : "Add"} Product | Halal ERP`}
-        description="Product management form"
+        title={`${isEdit ? "Edit" : "Tambah"} Produk | Halal ERP`}
+        description="Form manajemen produk"
       />
-      <PageBreadcrumb pageTitle={isEdit ? "Edit Product" : "Add Product"} />
+      <PageBreadcrumb pageTitle={isEdit ? "Edit Produk" : "Tambah Produk"} />
 
       <div className="rounded-xl border border-gray-200 bg-white p-5 dark:border-white/[0.05] dark:bg-white/[0.03] lg:p-8">
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Basic Information Section */}
           <div>
-            <h3 className="mb-4 text-lg font-medium text-gray-800 dark:text-white/90">Basic Information</h3>
+            <h3 className="mb-4 text-lg font-medium text-gray-800 dark:text-white/90">Informasi Dasar</h3>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="name">Product Name <span className="text-error-500">*</span></Label>
+                <Label htmlFor="name">Nama Produk <span className="text-error-500">*</span></Label>
                 <Input
                   id="name"
-                  placeholder="e.g. Fresh Milk"
+                  placeholder="Misal: Susu Segar"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
@@ -163,10 +163,10 @@ export default function ProductForm() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="code">Internal Code <span className="text-error-500">*</span></Label>
+                <Label htmlFor="code">Kode Internal <span className="text-error-500">*</span></Label>
                 <Input
                   id="code"
-                  placeholder="e.g. PRD001"
+                  placeholder="Misal: PRD001"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                   required
@@ -177,31 +177,31 @@ export default function ProductForm() {
                 <Label htmlFor="barcode">Barcode</Label>
                 <Input
                   id="barcode"
-                  placeholder="e.g. 899..."
+                  placeholder="Misal: 899..."
                   value={barcode}
                   onChange={(e) => setBarcode(e.target.value)}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="unit">Unit</Label>
+                <Label htmlFor="unit">Satuan</Label>
                 <Input
                   id="unit"
-                  placeholder="e.g. Pcs, Box, Kg"
+                  placeholder="Misal: Pcs, Box, Kg"
                   value={unit}
                   onChange={(e) => setUnit(e.target.value)}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="category">Category</Label>
+                <Label htmlFor="category">Kategori</Label>
                 <select
                   id="category"
                   value={categoryId}
                   onChange={(e) => setCategoryId(e.target.value)}
                   className="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm dark:border-gray-700 dark:text-white/90 focus:border-brand-300 focus:ring-brand-500/10"
                 >
-                  <option value="">Select Category</option>
+                  <option value="">Pilih Kategori</option>
                   {categories.map((cat) => (
                     <option key={cat.id} value={cat.id}>
                       {cat.name}
@@ -211,7 +211,7 @@ export default function ProductForm() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="price">Selling Price <span className="text-error-500">*</span></Label>
+                <Label htmlFor="price">Harga Jual <span className="text-error-500">*</span></Label>
                 <Input
                   id="price"
                   type="number"
@@ -223,7 +223,7 @@ export default function ProductForm() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="minStock">Minimum Stock</Label>
+                <Label htmlFor="minStock">Stok Minimum</Label>
                 <Input
                   id="minStock"
                   type="number"
@@ -242,7 +242,7 @@ export default function ProductForm() {
                       onChange={() => setStatus(true)}
                       className="size-4 accent-brand-500"
                     />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">Active</span>
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Aktif</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -251,7 +251,7 @@ export default function ProductForm() {
                       onChange={() => setStatus(false)}
                       className="size-4 accent-brand-500"
                     />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">Inactive</span>
+                    <span className="text-sm text-gray-700 dark:text-gray-300">Tidak Aktif</span>
                   </label>
                 </div>
               </div>
@@ -262,23 +262,23 @@ export default function ProductForm() {
 
           {/* Halal Certification Section */}
           <div>
-            <h3 className="mb-4 text-lg font-medium text-gray-800 dark:text-white/90">Halal Certification</h3>
+            <h3 className="mb-4 text-lg font-medium text-gray-800 dark:text-white/90">Sertifikasi Halal</h3>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="halalCert">Certificate Number</Label>
+                <Label htmlFor="halalCert">Nomor Sertifikat</Label>
                 <Input
                   id="halalCert"
-                  placeholder="e.g. ID00..."
+                  placeholder="Misal: ID00..."
                   value={halalCert}
                   onChange={(e) => setHalalCert(e.target.value)}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="halalAgency">Certification Agency</Label>
+                <Label htmlFor="halalAgency">Lembaga Sertifikasi</Label>
                 <Input
                   id="halalAgency"
-                  placeholder="e.g. BPJPH / LPPOM MUI"
+                  placeholder="Misal: BPJPH / LPPOM MUI"
                   value={halalAgency}
                   onChange={(e) => setHalalAgency(e.target.value)}
                 />
@@ -287,7 +287,7 @@ export default function ProductForm() {
               <div className="space-y-2">
                 <DatePicker
                   id="halalExpired"
-                  label="Expiry Date"
+                  label="Tanggal Kedaluwarsa"
                   defaultDate={halalExpired}
                   onChange={(_selectedDates, dateStr) => setHalalExpired(dateStr)}
                 />
@@ -301,10 +301,10 @@ export default function ProductForm() {
               type="button"
               onClick={() => navigate("/products")}
             >
-              Cancel
+              Batal
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Saving..." : isEdit ? "Save Changes" : "Create Product"}
+              {loading ? "Menyimpan..." : isEdit ? "Simpan Perubahan" : "Buat Produk"}
             </Button>
           </div>
         </form>

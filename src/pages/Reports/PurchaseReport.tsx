@@ -6,7 +6,7 @@ export default function PurchaseReport() {
   return (
     <>
       <PageMeta
-        title="Purchase Report | Halal ERP"
+        title="Laporan Pembelian | Halal ERP"
         description="Laporan Pembelian Stock dan Inventaris"
       />
       <PageBreadcrumb pageTitle="Laporan Pembelian" />

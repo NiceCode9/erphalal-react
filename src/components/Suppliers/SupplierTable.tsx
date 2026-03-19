@@ -61,7 +61,7 @@ export default function SupplierTable({ onEdit, refreshTrigger }: SupplierTableP
       setSuppliers(data || []);
       setTotalCount(count || 0);
     } catch (error: any) {
-      toast.error("Failed to load suppliers");
+      toast.error("Gagal memuat supplier");
     } finally {
       setLoading(false);
     }
@@ -82,10 +82,10 @@ export default function SupplierTable({ onEdit, refreshTrigger }: SupplierTableP
         .eq("id", supplierToDelete);
 
       if (error) throw error;
-      toast.success("Supplier deleted successfully");
+      toast.success("Supplier berhasil dihapus");
       fetchSuppliers();
     } catch (error: any) {
-      toast.error(error.message || "Failed to delete supplier");
+      toast.error(error.message || "Gagal menghapus supplier");
     } finally {
       setIsDeleteModalOpen(false);
       setSupplierToDelete(null);
@@ -99,7 +99,7 @@ export default function SupplierTable({ onEdit, refreshTrigger }: SupplierTableP
         <div className="max-w-sm">
           <input
             type="text"
-            placeholder="Search suppliers..."
+            placeholder="Cari supplier..."
             className="h-10 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2 text-sm dark:border-gray-700 dark:text-white/90 focus:border-brand-300 focus:ring-brand-500/10"
             value={searchTerm}
             onChange={(e) => {
@@ -114,11 +114,11 @@ export default function SupplierTable({ onEdit, refreshTrigger }: SupplierTableP
         <Table>
           <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
             <TableRow>
-              <TableCell isHeader className="px-5 py-3 text-start">Supplier Name</TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start">Contact Person</TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start">Phone/Email</TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start">Address</TableCell>
-              <TableCell isHeader className="px-5 py-3 text-right">Actions</TableCell>
+              <TableCell isHeader className="px-5 py-3 text-start">Nama Supplier</TableCell>
+              <TableCell isHeader className="px-5 py-3 text-start">Person Kontak</TableCell>
+              <TableCell isHeader className="px-5 py-3 text-start">Telepon/Email</TableCell>
+              <TableCell isHeader className="px-5 py-3 text-start">Alamat</TableCell>
+              <TableCell isHeader className="px-5 py-3 text-right">Aksi</TableCell>
             </TableRow>
           </TableHeader>
 
@@ -128,14 +128,14 @@ export default function SupplierTable({ onEdit, refreshTrigger }: SupplierTableP
                 <TableCell colSpan={5} className="px-5 py-10 text-center">
                   <div className="flex items-center justify-center gap-2">
                     <div className="h-5 w-5 animate-spin rounded-full border-2 border-brand-500 border-t-transparent"></div>
-                    <span className="text-sm font-medium text-gray-400">Loading suppliers...</span>
+                    <span className="text-sm font-medium text-gray-400">Memuat supplier...</span>
                   </div>
                 </TableCell>
               </TableRow>
             ) : suppliers.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="px-5 py-10 text-center text-gray-500">
-                  No suppliers found
+                  Supplier tidak ditemukan
                 </TableCell>
               </TableRow>
             ) : (
@@ -185,7 +185,7 @@ export default function SupplierTable({ onEdit, refreshTrigger }: SupplierTableP
       {!loading && totalPages > 1 && (
         <div className="px-5 py-4 border-t border-gray-100 dark:border-white/[0.05] flex items-center justify-between">
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Showing <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-medium">{Math.min(currentPage * itemsPerPage, totalCount)}</span> of <span className="font-medium">{totalCount}</span> results
+            Menampilkan <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span> sampai <span className="font-medium">{Math.min(currentPage * itemsPerPage, totalCount)}</span> dari <span className="font-medium">{totalCount}</span> hasil
           </p>
           <div className="flex gap-2">
             <Button
@@ -194,7 +194,7 @@ export default function SupplierTable({ onEdit, refreshTrigger }: SupplierTableP
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(prev => prev - 1)}
             >
-              Previous
+              Sebelumnya
             </Button>
             <Button
               size="sm"
@@ -202,7 +202,7 @@ export default function SupplierTable({ onEdit, refreshTrigger }: SupplierTableP
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage(prev => prev + 1)}
             >
-              Next
+              Selanjutnya
             </Button>
           </div>
         </div>
@@ -212,8 +212,8 @@ export default function SupplierTable({ onEdit, refreshTrigger }: SupplierTableP
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
-        title="Delete Supplier"
-        message="Are you sure you want to delete this supplier? This action cannot be undone."
+        title="Hapus Supplier"
+        message="Apakah Anda yakin ingin menghapus supplier ini? Tindakan ini tidak dapat dibatalkan."
         variant="danger"
       />
     </div>

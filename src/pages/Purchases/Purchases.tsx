@@ -12,25 +12,25 @@ export default function Purchases() {
   return (
     <>
       <PageMeta
-        title="Purchases | Halal ERP"
-        description="Purchase management page"
+        title="Pembelian | Halal ERP"
+        description="Halaman manajemen pembelian"
       />
-      <PageBreadcrumb pageTitle="Purchases" />
+      <PageBreadcrumb pageTitle="Pembelian" />
 
       <div className="space-y-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-xl font-semibold text-gray-800 dark:text-white/90">
-              Purchase History
+              Riwayat Pembelian
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Track and manage your stock purchase transactions
+              Lacak dan kelola transaksi pembelian stok Anda
             </p>
           </div>
           <Link to="/purchases/create">
             <Button size="sm" className="flex items-center gap-2">
               <PlusIcon />
-              New Purchase
+              Pembelian Baru
             </Button>
           </Link>
         </div>

@@ -97,15 +97,15 @@ export default function AddUserModal({
         if (profileError) {
           console.error("Profile update error: ", profileError);
           // Don't throw the error, the user is successfully added
-          toast.warning("User created, but profile update failed. You may need to edit it.");
+          toast.warning("User berhasil dibuat, tetapi pembaruan profil gagal. Anda mungkin perlu mengeditnya secara manual.");
         }
       }
 
-      toast.success("User created successfully");
+      toast.success("Pengguna berhasil dibuat");
       resetForm();
       onSuccess();
     } catch (error: any) {
-      toast.error(error.message || "An error occurred during user creation");
+      toast.error(error.message || "Terjadi kesalahan saat pembuatan pengguna");
     } finally {
       setLoading(false);
     }
@@ -115,19 +115,19 @@ export default function AddUserModal({
     <Modal isOpen={isOpen} onClose={onClose} className="max-w-[500px]">
       <div className="px-6 py-8">
         <h2 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-          Add New User
+          Tambah Pengguna Baru
         </h2>
         <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
-          Register a new user account and set their system role.
+          Daftarkan akun pengguna baru dan atur peran sistem mereka.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email Address <span className="text-error-500">*</span></Label>
+            <Label htmlFor="email">Alamat Email <span className="text-error-500">*</span></Label>
             <Input
               id="email"
               type="email"
-              placeholder="e.g. employee@halalerp.com"
+              placeholder="Misal: karyawan@halalerp.com"
               value={formData.email}
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
@@ -137,12 +137,12 @@ export default function AddUserModal({
           </div>
 
           <div className="space-y-2 relative">
-            <Label htmlFor="password">Password <span className="text-error-500">*</span></Label>
+            <Label htmlFor="password">Kata Sandi <span className="text-error-500">*</span></Label>
             <div className="relative">
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
-                placeholder="At least 6 characters"
+                placeholder="Minimal 6 karakter"
                 value={formData.password}
                 onChange={(e) =>
                   setFormData({ ...formData, password: e.target.value })
@@ -163,7 +163,7 @@ export default function AddUserModal({
           </div>
 
           <div className="space-y-2">
-            <Label>Role</Label>
+            <Label>Peran</Label>
             <div className="flex gap-4">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -191,14 +191,14 @@ export default function AddUserModal({
           </div>
 
           <div className="pt-2 border-t border-gray-100 dark:border-white/[0.05] mt-4 mb-2">
-             <p className="text-xs text-gray-400 mb-2">Optional Profile Info</p>
+             <p className="text-xs text-gray-400 mb-2">Info Profil (Opsional)</p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="full_name">Full Name</Label>
+            <Label htmlFor="full_name">Nama Lengkap</Label>
             <Input
               id="full_name"
-              placeholder="e.g. John Doe"
+              placeholder="Misal: John Doe"
               value={formData.full_name}
               onChange={(e) =>
                 setFormData({ ...formData, full_name: e.target.value })
@@ -208,7 +208,7 @@ export default function AddUserModal({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="first_name">First Name</Label>
+              <Label htmlFor="first_name">Nama Depan</Label>
               <Input
                 id="first_name"
                 value={formData.first_name}
@@ -218,7 +218,7 @@ export default function AddUserModal({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="last_name">Last Name</Label>
+              <Label htmlFor="last_name">Nama Belakang</Label>
               <Input
                 id="last_name"
                 value={formData.last_name}
@@ -230,7 +230,7 @@ export default function AddUserModal({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="phone">Phone Number</Label>
+            <Label htmlFor="phone">Nomor Telepon</Label>
             <Input
               id="phone"
               type="tel"
@@ -243,10 +243,10 @@ export default function AddUserModal({
 
           <div className="flex items-center justify-end gap-3 pt-6">
             <Button variant="outline" type="button" onClick={onClose}>
-              Cancel
+              Batal
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Creating..." : "Create User"}
+              {loading ? "Membuat..." : "Buat Pengguna"}
             </Button>
           </div>
         </form>
