@@ -26,6 +26,10 @@ import Suppliers from "./pages/Suppliers/Suppliers";
 import Purchases from "./pages/Purchases/Purchases";
 import PurchaseForm from "./pages/Purchases/PurchaseForm";
 import POS from "./pages/Sales/POS";
+import Users from "./pages/Users/Users";
+import SalesReport from "./pages/Reports/SalesReport";
+import StockReport from "./pages/Reports/StockReport";
+import PurchaseReport from "./pages/Reports/PurchaseReport";
 import { AuthProvider } from "./context/AuthContext";
 import { Toaster } from "sonner";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -61,6 +65,10 @@ export default function App() {
               <Route path="/purchases/create" element={<PurchaseForm />} />
               <Route path="/purchases/:id/edit" element={<PurchaseForm />} />
               <Route path="/pos" element={<POS />} />
+              <Route path="/users" element={<Users />} />
+              <Route path="/reports/sales" element={<SalesReport />} />
+              <Route path="/reports/stock" element={<StockReport />} />
+              <Route path="/reports/purchase" element={<PurchaseReport />} />
 
               {/* Others Page */}
               <Route path="/profile" element={<UserProfiles />} />

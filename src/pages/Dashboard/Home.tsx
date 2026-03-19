@@ -3,6 +3,7 @@ import EcommerceMetrics from "../../components/ecommerce/EcommerceMetrics";
 import MonthlySalesChart from "../../components/ecommerce/MonthlySalesChart";
 import RecentOrders from "../../components/ecommerce/RecentOrders";
 import HalalExpiryTable from "../../components/ecommerce/HalalExpiryTable";
+import RecentPurchases from "../../components/ecommerce/RecentPurchases";
 import PageMeta from "../../components/common/PageMeta";
 import { supabase } from "../../lib/supabaseClient";
 import { toast } from "sonner";
@@ -13,9 +14,13 @@ export default function Home() {
     totalCategories: 0,
     totalSales: 0,
     totalRevenue: 0,
-    recentSales: [],
+    totalSpending: 0,
+    revenueGrowth: 0,
+    lowStockCount: 0,
+    recentSales: [] as any[],
+    recentPurchases: [] as any[],
     halalExpiringProducts: [] as any[],
-    monthlySeries: [] as { name: string; data: number[] }[],
+    monthlySeries: [] as { name: string; data: number[]; color?: string }[],
     monthlyCategories: [] as string[],
   });
   const [loading, setLoading] = useState(true);
@@ -28,66 +33,146 @@ export default function Home() {
     try {
       setLoading(true);
 
-      // fetch products count
-      const { count: productsCount, error: pError } = await supabase
-        .from("products")
-        .select("*", { count: "exact", head: true });
-      if (pError) throw pError;
-      
-      // fetch categories count
-      const { count: catCount, error: cError } = await supabase
-        .from("categories")
-        .select("*", { count: "exact", head: true });
-      if (cError) throw cError;
+      // 1. Fetch counts
+      const [
+        { count: productsCount },
+        { count: catCount },
+        { count: lowStockCount },
+      ] = await Promise.all([
+        supabase.from("products").select("*", { count: "exact", head: true }),
+        supabase.from("categories").select("*", { count: "exact", head: true }),
+        supabase
+          .from("products")
+          .select("*", { count: "exact", head: true })
+          .lt("stock", 10),
+      ]);
 
-      // fetch sales
-      const { data: sales, error: salesError } = await supabase
-        .from("sales")
-        .select("*")
-        .order("created_at", { ascending: false });
+      // 2. Fetch revenue & spending data for current year
+      const currentYear = new Date().getFullYear();
+      const startOfYear = new Date(currentYear, 0, 1).toISOString();
+
+      const [
+        { data: yearSales, error: salesError },
+        { data: yearPurchases, error: purchaseError },
+      ] = await Promise.all([
+        supabase
+          .from("sales")
+          .select("total, created_at")
+          .gte("created_at", startOfYear),
+        supabase
+          .from("purchases")
+          .select("total, purchase_date")
+          .gte("purchase_date", startOfYear),
+      ]);
+
       if (salesError) throw salesError;
+      if (purchaseError) throw purchaseError;
 
-      const totalSales = sales?.length || 0;
-      const totalRevenue = sales?.reduce((sum, sale) => sum + (sale.total || 0), 0) || 0;
-      const recentSales: any = sales?.slice(0, 5) || [];
+      // 3. Calculate Monthly Data & MoM Comparison
+      const now = new Date();
+      const currentMonth = now.getMonth();
 
-      // fetch products with halal expiry within next 30 days
+      const monthlySalesData = new Array(12).fill(0);
+      const monthlyPurchaseData = new Array(12).fill(0);
+
+      let thisMonthRevenue = 0;
+      let lastMonthRevenue = 0;
+      let totalRevenue = 0;
+      let totalSpending = 0;
+
+      yearSales?.forEach((sale: any) => {
+        const date = new Date(sale.created_at);
+        const m = date.getMonth();
+        const amount = sale.total || 0;
+
+        monthlySalesData[m] += amount;
+        if (m === currentMonth) thisMonthRevenue += amount;
+        if (m === currentMonth - 1) lastMonthRevenue += amount;
+        totalRevenue += amount;
+      });
+
+      yearPurchases?.forEach((purchase: any) => {
+        const date = new Date(purchase.purchase_date);
+        const m = date.getMonth();
+        const amount = purchase.total || 0;
+
+        monthlyPurchaseData[m] += amount;
+        totalSpending += amount;
+      });
+
+      // Calculate growth (percentage)
+      let revenueGrowth = 0;
+      if (lastMonthRevenue > 0) {
+        revenueGrowth =
+          ((thisMonthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100;
+      } else if (thisMonthRevenue > 0) {
+        revenueGrowth = 100;
+      }
+
+      // 4. Fetch Total Sales Count
+      const { count: totalSalesCount } = await supabase
+        .from("sales")
+        .select("*", { count: "exact", head: true });
+
+      // 5. Fetch Recent Data
+      const [{ data: recentSales }, { data: recentPurchases }] =
+        await Promise.all([
+          supabase
+            .from("sales")
+            .select("*")
+            .order("created_at", { ascending: false })
+            .limit(5),
+          supabase
+            .from("purchases")
+            .select("*, suppliers(name)")
+            .order("purchase_date", { ascending: false })
+            .limit(5),
+        ]);
+
+      // 6. Fetch products with halal expiry within next 30 days
       const thirtyDaysFromNow = new Date();
       thirtyDaysFromNow.setDate(thirtyDaysFromNow.getDate() + 30);
-      
-      const { data: halalProducts, error: hError } = await supabase
+
+      const { data: halalProducts } = await supabase
         .from("products")
         .select("id, name, halal_certificate_number, halal_expired")
         .not("halal_expired", "is", null)
         .lte("halal_expired", thirtyDaysFromNow.toISOString())
         .order("halal_expired", { ascending: true })
-        .limit(10);
-      
-      if (hError) throw hError;
+        .limit(5);
 
-      // Calculate monthly sales for the current year
-      const currentYear = new Date().getFullYear();
-      const monthlyData = new Array(12).fill(0);
-      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      
-      sales?.forEach((sale: any) => {
-        const date = new Date(sale.created_at);
-        if (date.getFullYear() === currentYear) {
-          monthlyData[date.getMonth()] += (sale.total || 0);
-        }
-      });
+      const monthNames = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
 
       setData({
         totalProducts: productsCount || 0,
         totalCategories: catCount || 0,
-        totalSales,
+        totalSales: totalSalesCount || 0,
         totalRevenue,
-        recentSales,
+        totalSpending,
+        revenueGrowth,
+        lowStockCount: lowStockCount || 0,
+        recentSales: recentSales || [],
+        recentPurchases: recentPurchases || [],
         halalExpiringProducts: halalProducts || [],
-        monthlySeries: [{ name: "Sales (Rp)", data: monthlyData }],
+        monthlySeries: [
+          { name: "Penjualan", data: monthlySalesData, color: "#465fff" },
+          { name: "Pembelian", data: monthlyPurchaseData, color: "#f97316" },
+        ],
         monthlyCategories: monthNames,
       });
-
     } catch (error: any) {
       console.error(error);
       toast.error("Failed to load dashboard data");
@@ -103,24 +188,35 @@ export default function Home() {
         description="ERP Dashboard Overview"
       />
       {loading ? (
-        <div className="flex h-[50vh] items-center justify-center text-gray-500">Loading dashboard data...</div>
+        <div className="flex h-[50vh] items-center justify-center text-gray-500">
+          Loading dashboard data...
+        </div>
       ) : (
-        <div className="grid grid-cols-12 gap-4 md:gap-6">
-          <div className="col-span-12 space-y-6 xl:col-span-8">
-            <EcommerceMetrics 
-              totalProducts={data.totalProducts}
-              totalCategories={data.totalCategories}
-              totalSales={data.totalSales}
-              totalRevenue={data.totalRevenue}
-            />
-            <MonthlySalesChart 
-              series={data.monthlySeries}
-              categories={data.monthlyCategories}
-            />
-            <HalalExpiryTable products={data.halalExpiringProducts} />
-          </div>
+        <div className="flex flex-col gap-6">
+          {/* Top Metrics Row */}
+          <EcommerceMetrics
+            totalProducts={data.totalProducts}
+            totalCategories={data.totalCategories}
+            totalRevenue={data.totalRevenue}
+            totalSpending={data.totalSpending}
+            revenueGrowth={data.revenueGrowth}
+            lowStockCount={data.lowStockCount}
+          />
 
-          <div className="col-span-12 xl:col-span-4 space-y-6">
+          {/* Halal Expiry - Priority Top Row */}
+          {data.halalExpiringProducts.length > 0 && (
+            <HalalExpiryTable products={data.halalExpiringProducts} />
+          )}
+
+          {/* Monthly Chart (Sales vs Purchases) */}
+          <MonthlySalesChart
+            series={data.monthlySeries}
+            categories={data.monthlyCategories}
+          />
+
+          {/* Middle Row: Recent Data */}
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+            <RecentPurchases purchases={data.recentPurchases} />
             <RecentOrders sales={data.recentSales} />
           </div>
         </div>

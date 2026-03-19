@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import PageMeta from "../../components/common/PageMeta";
 import { supabase } from "../../lib/supabaseClient";
@@ -7,6 +7,7 @@ import Button from "../../components/ui/button/Button";
 import Input from "../../components/form/input/InputField";
 import { TrashBinIcon } from "../../icons";
 import { useAuth } from "../../context/AuthContext";
+import Receipt from "../../components/Sales/Receipt";
 
 interface Product {
   id: number;
@@ -19,6 +20,7 @@ interface Product {
   categories?: { name: string };
   stock_batches?: { id: number; quantity: number }[];
   totalStock?: number;
+  halal_expired: string | null;
 }
 
 interface Category {
@@ -41,9 +43,14 @@ export default function POS() {
 
   const [cart, setCart] = useState<CartItem[]>([]);
   const [discount, setDiscount] = useState<number>(0);
-  const [tax, setTax] = useState<number>(0); // e.g. amount or percentage. Let's do amount for simplicity.
+  const [tax, setTax] = useState<number>(0);
   const [cashReceived, setCashReceived] = useState<number>(0);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // States for printing
+  const [lastSale, setLastSale] = useState<any>(null);
+  const [lastItems, setLastItems] = useState<any[]>([]);
+  const receiptRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchData();
@@ -52,11 +59,9 @@ export default function POS() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      // Fetch categories
       const { data: catData } = await supabase.from("categories").select("*").order("name");
       if (catData) setCategories(catData);
 
-      // Fetch active products with stock
       const { data: prodData, error: prodError } = await supabase
         .from("products")
         .select("*, categories(name), stock_batches(id, quantity)")
@@ -92,6 +97,12 @@ export default function POS() {
   }, [products, searchTerm, selectedCategory]);
 
   const addToCart = (product: Product) => {
+    // Check if halal certificate is expired
+    if (product.halal_expired && new Date(product.halal_expired) < new Date()) {
+      toast.error(`Cannot add ${product.name}: Halal Certificate has expired (${new Date(product.halal_expired).toLocaleDateString()})`);
+      return;
+    }
+
     setCart((prevCart) => {
       const existing = prevCart.find((item) => item.id === product.id);
       
@@ -156,6 +167,12 @@ export default function POS() {
   const grandTotal = subtotal - discount + tax;
   const change = cashReceived - grandTotal;
 
+  const handlePrint = () => {
+    setTimeout(() => {
+      window.print();
+    }, 500);
+  };
+
   const handleCheckout = async () => {
     if (cart.length === 0) {
       toast.error("Cart is empty!");
@@ -168,10 +185,8 @@ export default function POS() {
 
     setIsProcessing(true);
     try {
-      // 1. Generate Invoice Number
       const invoiceNumber = `INV-${Date.now()}`;
 
-      // 2. Create Sale
       const { data: saleData, error: saleError } = await supabase
         .from("sales")
         .insert([
@@ -193,14 +208,11 @@ export default function POS() {
       if (saleError) throw saleError;
       const saleId = saleData.id;
 
-      // 3. Process each cart item and deduct stock
       const saleItemsToInsert = [];
       const stockUpdates = [];
 
       for (const item of cart) {
         let remainingQty = item.cartQuantity;
-        
-        // Fetch fresh stock batches for this item, order by creation or expiry to do FIFO
         const { data: batches } = await supabase
           .from("stock_batches")
           .select("*")
@@ -214,16 +226,9 @@ export default function POS() {
 
         for (const batch of batches) {
           if (remainingQty <= 0) break;
-
           const takeQty = Math.min(batch.quantity, remainingQty);
           remainingQty -= takeQty;
-          
-          // Prepare DB updates
-          stockUpdates.push({
-            id: batch.id,
-            quantity: batch.quantity - takeQty
-          });
-
+          stockUpdates.push({ id: batch.id, quantity: batch.quantity - takeQty });
           saleItemsToInsert.push({
             sale_id: saleId,
             product_id: item.id,
@@ -233,36 +238,42 @@ export default function POS() {
             subtotal: takeQty * item.selling_price,
           });
         }
-
-        if (remainingQty > 0) {
-          throw new Error(`Not enough total stock for ${item.name}`);
-        }
+        if (remainingQty > 0) throw new Error(`Not enough total stock for ${item.name}`);
       }
 
-      // Insert sale items
       const { error: itemsError } = await supabase.from("sale_items").insert(saleItemsToInsert);
       if (itemsError) throw itemsError;
 
-      // Update stock batches
-      // Supabase currently doesn't have bulk update RPC out of the box unless we create one,
-      // so we have to update them individually.
       for (const update of stockUpdates) {
         const { error: updateError } = await supabase
           .from("stock_batches")
           .update({ quantity: update.quantity, updated_at: new Date().toISOString() })
           .eq("id", update.id);
-        
         if (updateError) throw updateError;
       }
 
-      toast.success(`Transaction successful! Invoice: ${invoiceNumber}`);
+      // Prepare for print
+      setLastSale({
+        ...saleData,
+        user_name: user?.user_metadata?.full_name || user?.email,
+      });
+      setLastItems(cart.map(i => ({
+        name: i.name,
+        quantity: i.cartQuantity,
+        price: i.selling_price,
+        subtotal: i.subtotal
+      })));
+
+      toast.success(`Transaction successful! Printing receipt...`);
       
+      handlePrint();
+
       // Reset form
       setCart([]);
       setDiscount(0);
       setTax(0);
       setCashReceived(0);
-      fetchData(); // Refresh stock
+      fetchData();
 
     } catch (error: any) {
       console.error(error);
@@ -278,7 +289,44 @@ export default function POS() {
         title="POS Cashier | Halal ERP"
         description="Point of Sale system"
       />
-      <PageBreadcrumb pageTitle="POS Cashier" />
+
+      {/* Modern Print Styles to hide everything EXCEPT the receipt during print */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media print {
+          body * {
+            visibility: hidden;
+            margin: 0;
+            padding: 0;
+          }
+          #print-receipt, #print-receipt * {
+            visibility: visible;
+          }
+          #print-receipt {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex !important;
+            justify-content: center !important;
+          }
+          /* Hide standard browser header/footer */
+          @page {
+            size: auto;
+            margin: 0mm;
+          }
+        }
+      `}} />
+
+      {/* Receipt Component for Printing */}
+      <div id="print-receipt" className="hidden print:block">
+        {lastSale && (
+          <Receipt ref={receiptRef} sale={lastSale} items={lastItems} />
+        )}
+      </div>
+
+      <PageBreadcrumb pageTitle="POS Kasir" />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
@@ -314,26 +362,50 @@ export default function POS() {
               <div className="flex justify-center items-center h-full text-gray-500">No products found</div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                {filteredProducts.map((product) => (
-                  <div
-                    key={product.id}
-                    onClick={() => addToCart(product)}
-                    className="cursor-pointer flex flex-col p-4 rounded-xl border border-gray-100 hover:border-brand-300 hover:shadow-sm transition-all dark:border-white/[0.05] bg-gray-50/50 dark:bg-white/[0.02]"
-                  >
-                    <div className="font-semibold text-gray-800 dark:text-white/90 truncate mb-1" title={product.name}>
-                      {product.name}
+                {filteredProducts.map((product) => {
+                  const isHalalExpired = product.halal_expired && new Date(product.halal_expired) < new Date();
+                  
+                  return (
+                    <div
+                      key={product.id}
+                      onClick={() => !isHalalExpired && addToCart(product)}
+                      className={`relative flex flex-col p-4 rounded-xl border transition-all ${
+                        isHalalExpired 
+                          ? "bg-gray-100 dark:bg-white/[0.01] border-gray-200 dark:border-white/[0.05] opacity-60 cursor-not-allowed" 
+                          : "cursor-pointer border-gray-100 hover:border-brand-300 hover:shadow-sm dark:border-white/[0.05] bg-gray-50/50 dark:bg-white/[0.02]"
+                      }`}
+                    >
+                      {isHalalExpired && (
+                        <div className="absolute top-2 right-2 z-10">
+                          <span className="bg-error-500 text-white text-[10px] px-1.5 py-0.5 rounded-md font-bold uppercase shadow-sm">
+                            Expired
+                          </span>
+                        </div>
+                      )}
+                      
+                      <div className={`font-semibold truncate mb-1 ${isHalalExpired ? "text-gray-400" : "text-gray-800 dark:text-white/90"}`} title={product.name}>
+                        {product.name}
+                      </div>
+                      <div className={`text-xs font-medium mb-3 ${isHalalExpired ? "text-gray-400" : "text-brand-500"}`}>
+                        Rp {product.selling_price.toLocaleString()}
+                      </div>
+
+                      {isHalalExpired && (
+                        <div className="text-[10px] text-error-500 font-bold mb-2 uppercase flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-error-500 animate-pulse"></span>
+                          Halal Kedaluwarsa
+                        </div>
+                      )}
+
+                      <div className="mt-auto flex justify-between items-center gap-2 flex-wrap text-xs text-gray-500">
+                        <span className="truncate">{product.code}</span>
+                        <span className={`whitespace-nowrap ${(product.totalStock || 0) <= product.min_stock ? "text-error-500 font-bold" : ""}`}>
+                          Stock: {product.totalStock}
+                        </span>
+                      </div>
                     </div>
-                    <div className="text-xs text-brand-500 font-medium mb-3">
-                      Rp {product.selling_price.toLocaleString()}
-                    </div>
-                    <div className="mt-auto flex justify-between items-center gap-2 flex-wrap text-xs text-gray-500">
-                      <span className="truncate">{product.code}</span>
-                      <span className={`whitespace-nowrap ${(product.totalStock || 0) <= product.min_stock ? "text-error-500 font-bold" : ""}`}>
-                        Stock: {product.totalStock}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>

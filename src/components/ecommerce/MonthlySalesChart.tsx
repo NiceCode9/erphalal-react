@@ -12,7 +12,7 @@ interface MonthlySalesChartProps {
 
 export default function MonthlySalesChart({ series, categories }: MonthlySalesChartProps) {
   const options: ApexOptions = {
-    colors: ["#465fff"],
+    colors: ["#465fff", "#f97316"],
     chart: {
       fontFamily: "Outfit, sans-serif",
       type: "bar",
@@ -24,8 +24,8 @@ export default function MonthlySalesChart({ series, categories }: MonthlySalesCh
     plotOptions: {
       bar: {
         horizontal: false,
-        columnWidth: "39%",
-        borderRadius: 5,
+        columnWidth: "40%",
+        borderRadius: 6,
         borderRadiusApplication: "end",
       },
     },
@@ -34,7 +34,7 @@ export default function MonthlySalesChart({ series, categories }: MonthlySalesCh
     },
     stroke: {
       show: true,
-      width: 4,
+      width: 2,
       colors: ["transparent"],
     },
     xaxis: {
@@ -49,15 +49,21 @@ export default function MonthlySalesChart({ series, categories }: MonthlySalesCh
     legend: {
       show: true,
       position: "top",
-      horizontalAlign: "left",
+      horizontalAlign: "right",
       fontFamily: "Outfit",
+      fontWeight: 700,
+      markers: {
+        shape: "circle",
+      }
     },
     yaxis: {
-      title: {
-        text: undefined,
-      },
+      labels: {
+        formatter: (val: number) => `Rp ${val / 1000}k`,
+      }
     },
     grid: {
+      borderColor: "rgba(0,0,0,0.05)",
+      strokeDashArray: 4,
       yaxis: {
         lines: {
           show: true,
@@ -65,11 +71,21 @@ export default function MonthlySalesChart({ series, categories }: MonthlySalesCh
       },
     },
     fill: {
-      opacity: 1,
+      type: "gradient",
+      gradient: {
+        shade: "light",
+        type: "vertical",
+        shadeIntensity: 0.5,
+        inverseColors: false,
+        opacityFrom: 0.9,
+        opacityTo: 0.4,
+        stops: [0, 100],
+      },
     },
     tooltip: {
+      theme: "light",
       x: {
-        show: false,
+        show: true,
       },
       y: {
         formatter: (val: number) => `Rp ${val.toLocaleString()}`,
@@ -88,11 +104,16 @@ export default function MonthlySalesChart({ series, categories }: MonthlySalesCh
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-          Monthly Sales
-        </h3>
+    <div className="overflow-hidden rounded-[2rem] border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-white/[0.05] dark:bg-white/[0.02]">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h3 className="text-lg font-bold text-gray-800 dark:text-white/90">
+            Analisis Keuangan
+          </h3>
+          <p className="text-xs text-gray-400 font-medium tracking-wide uppercase">
+            Penjualan vs Pembelian ({new Date().getFullYear()})
+          </p>
+        </div>
         <div className="relative inline-block">
           <button className="dropdown-toggle" onClick={toggleDropdown}>
             <MoreDotIcon className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 size-6" />
