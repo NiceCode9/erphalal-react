@@ -10,6 +10,7 @@ import {
   BoxIcon,
   GroupIcon,
   TaskIcon,
+  DollarLineIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 
@@ -30,6 +31,11 @@ const navItems: NavItem[] = [
     icon: <TaskIcon />,
     name: "Purchases",
     path: "/purchases",
+  },
+  {
+    icon: <DollarLineIcon />,
+    name: "POS Kasir",
+    path: "/pos",
   },
   {
     icon: <BoxIcon />,
@@ -268,29 +274,17 @@ const AppSidebar: React.FC = () => {
       >
         <Link to="/">
           {isExpanded || isHovered || isMobileOpen ? (
-            <>
-              <img
-                className="dark:hidden"
-                src="/images/logo/logo.svg"
-                alt="Logo"
-                width={150}
-                height={40}
-              />
-              <img
-                className="hidden dark:block"
-                src="/images/logo/logo-dark.svg"
-                alt="Logo"
-                width={150}
-                height={40}
-              />
-            </>
+            <div className="flex items-center">
+              <span className="text-xl font-bold bg-gradient-to-r from-brand-600 to-brand-400 bg-clip-text text-transparent dark:from-brand-400 dark:to-brand-200">
+                ERP Halal POS
+              </span>
+            </div>
           ) : (
-            <img
-              src="/images/logo/logo-icon.svg"
-              alt="Logo"
-              width={32}
-              height={32}
-            />
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-brand-50 dark:bg-brand-900/20">
+              <span className="text-sm font-bold text-brand-600 dark:text-brand-400">
+                EHP
+              </span>
+            </div>
           )}
         </Link>
       </div>

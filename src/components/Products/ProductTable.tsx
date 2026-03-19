@@ -10,7 +10,7 @@ import {
 import { supabase } from "../../lib/supabaseClient";
 import ConfirmationModal from "../ui/modal/ConfirmationModal";
 import { toast } from "sonner";
-import { PencilIcon, TrashBinIcon } from "../../icons";
+import { PencilIcon, TrashBinIcon, EyeIcon } from "../../icons";
 
 interface Product {
   id: number;
@@ -23,6 +23,7 @@ interface Product {
   status: boolean;
   category_id: number | null;
   categories?: { name: string };
+  stock_batches?: { quantity: number }[];
 }
 
 interface ProductTableProps {
@@ -37,7 +38,7 @@ export default function ProductTable({ refreshTrigger }: ProductTableProps) {
   const [totalCount, setTotalCount] = useState(0);
   const [itemsPerPage] = useState(10);
   const totalPages = Math.ceil(totalCount / itemsPerPage);
-  
+
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -50,7 +51,7 @@ export default function ProductTable({ refreshTrigger }: ProductTableProps) {
 
       let query = supabase
         .from("products")
-        .select("*, categories(name)", { count: "exact" })
+        .select("*, categories(name), stock_batches(quantity)", { count: "exact" })
         .order("created_at", { ascending: false })
         .range(from, to);
 
@@ -88,7 +89,10 @@ export default function ProductTable({ refreshTrigger }: ProductTableProps) {
     if (!productToDelete) return;
     setIsDeleting(true);
     try {
-      const { error } = await supabase.from("products").delete().eq("id", productToDelete);
+      const { error } = await supabase
+        .from("products")
+        .delete()
+        .eq("id", productToDelete);
       if (error) throw error;
       toast.success("Product deleted successfully");
       fetchProducts();
@@ -119,27 +123,57 @@ export default function ProductTable({ refreshTrigger }: ProductTableProps) {
         <Table>
           <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
             <TableRow>
-              <TableCell isHeader className="px-5 py-3 text-start">Product</TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start">Category</TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start">Price</TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start">Unit</TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start">Stock Info</TableCell>
-              <TableCell isHeader className="px-5 py-3 text-start">Status</TableCell>
-              <TableCell isHeader className="px-5 py-3 text-right">Actions</TableCell>
+              <TableCell isHeader className="px-5 py-3 text-start">
+                Product
+              </TableCell>
+              <TableCell isHeader className="px-5 py-3 text-start">
+                Category
+              </TableCell>
+              <TableCell isHeader className="px-5 py-3 text-start">
+                Price
+              </TableCell>
+              <TableCell isHeader className="px-5 py-3 text-start">
+                Unit
+              </TableCell>
+              <TableCell isHeader className="px-5 py-3 text-start">
+                Total Stock
+              </TableCell>
+              <TableCell isHeader className="px-5 py-3 text-start">
+                Stock Info
+              </TableCell>
+              <TableCell isHeader className="px-5 py-3 text-start">
+                Status
+              </TableCell>
+              <TableCell isHeader className="px-5 py-3 text-right">
+                Actions
+              </TableCell>
             </TableRow>
           </TableHeader>
           <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
             {loading ? (
-              <TableRow><TableCell colSpan={6} className="py-10 text-center">Loading...</TableCell></TableRow>
+              <TableRow>
+                <TableCell colSpan={8} className="py-10 text-center">
+                  Loading...
+                </TableCell>
+              </TableRow>
             ) : products.length === 0 ? (
-              <TableRow><TableCell colSpan={6} className="py-10 text-center">No products found.</TableCell></TableRow>
+              <TableRow>
+                <TableCell colSpan={8} className="py-10 text-center">
+                  No products found.
+                </TableCell>
+              </TableRow>
             ) : (
               products.map((product) => (
                 <TableRow key={product.id}>
                   <TableCell className="px-5 py-4">
                     <div className="flex flex-col">
-                      <span className="font-medium text-gray-800 dark:text-white/90">{product.name}</span>
-                      <span className="text-xs text-gray-400">Code: {product.code} {product.barcode ? `| Barcode: ${product.barcode}` : ""}</span>
+                      <span className="font-medium text-gray-800 dark:text-white/90">
+                        {product.name}
+                      </span>
+                      <span className="text-xs text-gray-400">
+                        Code: {product.code}{" "}
+                        {product.barcode ? `| Barcode: ${product.barcode}` : ""}
+                      </span>
                     </div>
                   </TableCell>
                   <TableCell className="px-5 py-4 text-gray-500 dark:text-gray-400">
@@ -151,22 +185,44 @@ export default function ProductTable({ refreshTrigger }: ProductTableProps) {
                   <TableCell className="px-5 py-4 text-gray-500 dark:text-gray-400">
                     {product.unit || "-"}
                   </TableCell>
-                  <TableCell className="px-5 py-4">
-                    <span className="text-theme-xs text-gray-500">Min: {product.min_stock}</span>
+                  <TableCell className="px-5 py-4 font-medium text-gray-800 dark:text-white">
+                    {product.stock_batches?.reduce((sum, batch) => sum + batch.quantity, 0) || 0}
                   </TableCell>
                   <TableCell className="px-5 py-4">
-                    <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-                      product.status ? "bg-success-50 text-success-600" : "bg-error-50 text-error-600"
-                    }`}>
+                    <span className="text-theme-xs text-gray-500">
+                      Min: {product.min_stock}
+                    </span>
+                  </TableCell>
+                  <TableCell className="px-5 py-4">
+                    <span
+                      className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
+                        product.status
+                          ? "bg-success-50 text-success-600"
+                          : "bg-error-50 text-error-600"
+                      }`}
+                    >
                       {product.status ? "Active" : "Inactive"}
                     </span>
                   </TableCell>
                   <TableCell className="px-5 py-4 text-right">
                     <div className="flex justify-end gap-2">
-                      <Link to={`/products/${product.id}/edit`} className="text-brand-500 hover:text-brand-600">
+                      <Link
+                        to={`/products/${product.id}`}
+                        // className="text-brand-500 hover:text-brand-600"
+                      >
+                        {/* <EyeIcon className="size-5" /> */}
+                        <EyeIcon className="fill-gray-500 hover:text-brand-600 dark:fill-gray-400 size-5" />
+                      </Link>
+                      <Link
+                        to={`/products/${product.id}/edit`}
+                        className="text-brand-500 hover:text-brand-600"
+                      >
                         <PencilIcon className="size-5" />
                       </Link>
-                      <button onClick={() => handleDeleteClick(product.id)} className="text-error-500 hover:text-error-600">
+                      <button
+                        onClick={() => handleDeleteClick(product.id)}
+                        className="text-error-500 hover:text-error-600"
+                      >
                         <TrashBinIcon className="size-5" />
                       </button>
                     </div>
@@ -194,15 +250,17 @@ export default function ProductTable({ refreshTrigger }: ProductTableProps) {
           <p className="text-sm text-gray-500">Total: {totalCount} items</p>
           <div className="flex gap-2">
             <button
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
               className="px-3 py-1 border rounded disabled:opacity-50"
             >
               Prev
             </button>
-            <span className="px-3 py-1">{currentPage} / {totalPages}</span>
+            <span className="px-3 py-1">
+              {currentPage} / {totalPages}
+            </span>
             <button
-              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
               className="px-3 py-1 border rounded disabled:opacity-50"
             >

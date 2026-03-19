@@ -21,9 +21,11 @@ import Home from "./pages/Dashboard/Home";
 import Categories from "./pages/Categories/Categories";
 import Products from "./pages/Products/Products";
 import ProductForm from "./pages/Products/ProductForm";
+import ProductDetails from "./pages/Products/ProductDetails";
 import Suppliers from "./pages/Suppliers/Suppliers";
 import Purchases from "./pages/Purchases/Purchases";
 import PurchaseForm from "./pages/Purchases/PurchaseForm";
+import POS from "./pages/Sales/POS";
 import { AuthProvider } from "./context/AuthContext";
 import { Toaster } from "sonner";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -52,11 +54,13 @@ export default function App() {
               <Route path="/categories" element={<Categories />} />
               <Route path="/products" element={<Products />} />
               <Route path="/products/create" element={<ProductForm />} />
+              <Route path="/products/:id" element={<ProductDetails />} />
               <Route path="/products/:id/edit" element={<ProductForm />} />
               <Route path="/suppliers" element={<Suppliers />} />
               <Route path="/purchases" element={<Purchases />} />
               <Route path="/purchases/create" element={<PurchaseForm />} />
               <Route path="/purchases/:id/edit" element={<PurchaseForm />} />
+              <Route path="/pos" element={<POS />} />
 
               {/* Others Page */}
               <Route path="/profile" element={<UserProfiles />} />

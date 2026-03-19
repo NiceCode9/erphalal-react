@@ -71,7 +71,9 @@ export default function SignInForm() {
                 <Input
                   placeholder="info@gmail.com"
                   value={email}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setEmail(e.target.value)
+                  }
                   required
                 />
               </div>
@@ -84,7 +86,9 @@ export default function SignInForm() {
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     value={password}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setPassword(e.target.value)
+                    }
                     required
                   />
                   <span
@@ -118,7 +122,12 @@ export default function SignInForm() {
                 </Link>
               </div>
               <div>
-                <Button className="w-full" size="sm" disabled={loading}>
+                <Button
+                  className="w-full"
+                  size="sm"
+                  disabled={loading}
+                  type="submit"
+                >
                   {loading ? "Signing in..." : "Sign in"}
                 </Button>
               </div>
