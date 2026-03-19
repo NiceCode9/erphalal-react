@@ -63,7 +63,7 @@ export default function PurchaseReturnModal({
         .eq("purchase_id", purchaseId);
 
       if (error) throw error;
-      setItems(data || []);
+      setItems((data as any) || []);
     } catch (error: any) {
       toast.error("Failed to load purchase items");
     }

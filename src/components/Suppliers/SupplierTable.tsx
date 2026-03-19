@@ -214,7 +214,6 @@ export default function SupplierTable({ onEdit, refreshTrigger }: SupplierTableP
         onConfirm={handleConfirmDelete}
         title="Delete Supplier"
         message="Are you sure you want to delete this supplier? This action cannot be undone."
-        confirmText="Delete"
         variant="danger"
       />
     </div>

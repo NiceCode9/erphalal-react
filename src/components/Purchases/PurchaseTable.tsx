@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import {
   Table,
@@ -228,7 +228,6 @@ export default function PurchaseTable({ refreshTrigger }: PurchaseTableProps) {
         onConfirm={handleConfirmDelete}
         title="Delete Purchase"
         message="Are you sure you want to delete this purchase transaction? This may affect your stock batches."
-        confirmText="Delete"
         variant="danger"
       />
 
