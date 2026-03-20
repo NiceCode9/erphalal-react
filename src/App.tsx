@@ -37,11 +37,11 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 export default function App() {
   return (
     <>
-    <AuthProvider>
-      <Toaster position="top-right" richColors closeButton />
-      <Router>
-        <ScrollToTop />
-        <Routes>
+      <AuthProvider>
+        <Toaster position="top-right" richColors closeButton />
+        <Router>
+          <ScrollToTop />
+          <Routes>
             {/* Dashboard Layout */}
             {/* Public Dashboard Layout (SignIn) */}
             <Route path="/" element={<SignIn />} />
@@ -93,9 +93,6 @@ export default function App() {
               <Route path="/line-chart" element={<LineChart />} />
               <Route path="/bar-chart" element={<BarChart />} />
             </Route>
-
-            {/* Auth Layout */}
-            <Route path="/signup" element={<SignUp />} />
 
             {/* Fallback Route */}
             <Route path="*" element={<NotFound />} />
